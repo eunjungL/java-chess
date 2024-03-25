@@ -1,9 +1,6 @@
 package chess.domain.piece.strategy;
 
 import chess.domain.board.Board;
-import chess.domain.piece.Piece;
-import chess.domain.piece.strategy.BishopLegalMoveCheckStrategy;
-import chess.domain.piece.strategy.LegalMoveCheckStrategy;
 import chess.domain.square.File;
 import chess.domain.square.Rank;
 import chess.domain.square.Square;
@@ -31,7 +28,6 @@ class BishopLegalMoveCheckStrategyTest {
         // given
         Square source = Square.of(File.E, Rank.SIX);
         Square destination = Square.of(File.H, Rank.THREE);
-        Piece destinationPiece = board.findPieceBySquare(destination);
 
         // when
         boolean actual = legalMoveCheckStrategy.check(source, destination,board);
@@ -46,7 +42,6 @@ class BishopLegalMoveCheckStrategyTest {
         // given
         Square source = Square.of(File.C, Rank.EIGHT);
         Square destination = Square.of(File.C, Rank.THREE);
-        Piece destinationPiece = board.findPieceBySquare(destination);
 
         // when
         boolean actual = legalMoveCheckStrategy.check(source, destination, board);

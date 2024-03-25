@@ -1,9 +1,6 @@
 package chess.domain.piece.strategy;
 
 import chess.domain.board.Board;
-import chess.domain.piece.Piece;
-import chess.domain.piece.strategy.LegalMoveCheckStrategy;
-import chess.domain.piece.strategy.RookLegalMoveCheckStrategy;
 import chess.domain.square.File;
 import chess.domain.square.Rank;
 import chess.domain.square.Square;
@@ -31,7 +28,6 @@ public class RookLegalMoveCheckStrategyTest {
         // given
         Square source = Square.of(File.A, Rank.SIX);
         Square destination = Square.of(File.H, Rank.SIX);
-        Piece destinationPiece = board.findPieceBySquare(destination);
 
         // when
         boolean actual = legalMoveCheckStrategy.check(source, destination, board);
@@ -46,7 +42,6 @@ public class RookLegalMoveCheckStrategyTest {
         // given
         Square source = Square.of(File.A, Rank.FIVE);
         Square destination = Square.of(File.A, Rank.TWO);
-        Piece destinationPiece = board.findPieceBySquare(destination);
 
         // when
         boolean actual = legalMoveCheckStrategy.check(source, destination, board);
@@ -61,7 +56,6 @@ public class RookLegalMoveCheckStrategyTest {
         // given
         Square source = Square.of(File.A, Rank.FIVE);
         Square destination = Square.of(File.B, Rank.TWO);
-        Piece destinationPiece = board.findPieceBySquare(destination);
 
         // when
         boolean actual = legalMoveCheckStrategy.check(source, destination, board);

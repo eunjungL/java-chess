@@ -1,9 +1,6 @@
 package chess.domain.piece.strategy;
 
 import chess.domain.board.Board;
-import chess.domain.piece.Piece;
-import chess.domain.piece.strategy.KingLegalMoveCheckStrategy;
-import chess.domain.piece.strategy.LegalMoveCheckStrategy;
 import chess.domain.square.File;
 import chess.domain.square.Rank;
 import chess.domain.square.Square;
@@ -31,7 +28,6 @@ public class KingLegalMoveCheckStrategyTest {
         // given
         Square source = Square.of(File.E, Rank.EIGHT);
         Square destination = Square.of(File.F, Rank.EIGHT);
-        Piece destinationPiece = board.findPieceBySquare(destination);
 
         // when
         boolean actual = legalMoveCheckStrategy.check(source, destination, board);
@@ -46,7 +42,6 @@ public class KingLegalMoveCheckStrategyTest {
         // given
         Square source = Square.of(File.E, Rank.EIGHT);
         Square destination = Square.of(File.E, Rank.SEVEN);
-        Piece destinationPiece = board.findPieceBySquare(destination);
 
         // when
         boolean actual = legalMoveCheckStrategy.check(source, destination, board);
@@ -61,7 +56,6 @@ public class KingLegalMoveCheckStrategyTest {
         // given
         Square source = Square.of(File.E, Rank.EIGHT);
         Square destination = Square.of(File.D, Rank.SEVEN);
-        Piece destinationPiece = board.findPieceBySquare(destination);
 
         // when
         boolean actual = legalMoveCheckStrategy.check(source, destination, board);
@@ -76,7 +70,6 @@ public class KingLegalMoveCheckStrategyTest {
         // given
         Square source = Square.of(File.E, Rank.EIGHT);
         Square destination = Square.of(File.C, Rank.SIX);
-        Piece destinationPiece = board.findPieceBySquare(destination);
 
         // when
         boolean actual = legalMoveCheckStrategy.check(source, destination, board);

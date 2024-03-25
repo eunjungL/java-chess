@@ -1,9 +1,6 @@
 package chess.domain.piece.strategy;
 
 import chess.domain.board.Board;
-import chess.domain.piece.Piece;
-import chess.domain.piece.strategy.LegalMoveCheckStrategy;
-import chess.domain.piece.strategy.PawnLegalMoveCheckStrategy;
 import chess.domain.square.File;
 import chess.domain.square.Rank;
 import chess.domain.square.Square;
@@ -31,7 +28,6 @@ public class PawnLegalMoveCheckStrategyTest {
         // given
         Square source = Square.of(File.A, Rank.THREE);
         Square destination = Square.of(File.A, Rank.FOUR);
-        Piece destinationPiece = board.findPieceBySquare(destination);
 
         // when
         boolean actual = legalMoveCheckStrategy.check(source, destination, board);
@@ -46,7 +42,6 @@ public class PawnLegalMoveCheckStrategyTest {
         // given
         Square source = Square.of(File.A, Rank.THREE);
         Square destination = Square.of(File.C, Rank.FOUR);
-        Piece destinationPiece = board.findPieceBySquare(destination);
 
         // when
         boolean actual = legalMoveCheckStrategy.check(source, destination, board);
@@ -61,7 +56,6 @@ public class PawnLegalMoveCheckStrategyTest {
         // given
         Square source = Square.of(File.A, Rank.THREE);
         Square destination = Square.of(File.B, Rank.FOUR);
-        Piece destinationPiece = board.findPieceBySquare(destination);
 
         // when
         boolean actual = legalMoveCheckStrategy.check(source, destination, board);
