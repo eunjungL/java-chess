@@ -10,7 +10,7 @@ import chess.domain.square.dto.SquareCreateCommand;
 import chess.util.RetryUtil;
 import chess.view.InputView;
 import chess.view.OutputView;
-import chess.view.PieceView;
+import chess.view.PieceName;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -93,8 +93,8 @@ public class ChessGame {
             Square square = Square.of(file, rank);
             Piece piece = boardOutput.get(square);
 
-            String pieceView = PieceView.toView(piece);
-            stringBuilder.append(pieceView);
+            String pieceName = PieceName.findName(piece);
+            stringBuilder.append(pieceName);
         }
 
         return stringBuilder.toString();
