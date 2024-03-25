@@ -45,16 +45,16 @@ public class PawnLegalMoveCheckStrategy implements LegalMoveCheckStrategy {
         return pawnNormalMoveCondition(forwardIndex, diff);
     }
 
-    private boolean isFirstRank(Square source) {
-        return source.isSameRank(WHITE_PAWN_FIRST_RANK) || source.isSameRank(BLACK_PAWN_FIRST_RANK);
-    }
-
     private int selectIndexByColor(int index, boolean isBlack) {
         if (isBlack) {
             return index * -1;
         }
 
         return index;
+    }
+
+    private boolean isFirstRank(Square source) {
+        return source.isSameRank(WHITE_PAWN_FIRST_RANK) || source.isSameRank(BLACK_PAWN_FIRST_RANK);
     }
 
     private boolean pawnFirstMoveCondition(int forwardIndex, SquareDifferent diff, int firstForwardIndex) {

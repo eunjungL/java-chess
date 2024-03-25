@@ -121,7 +121,7 @@ public class BoardTest {
         Piece actual = boardOutput.board().get(Square.of(File.H, Rank.FIVE));
 
         // then
-        assertThat(actual.isSameType(PieceType.PAWN.name())
+        assertThat(actual.getPieceType().equals(PieceType.PAWN)
                 && actual.isSameColor(new Piece(PieceType.PAWN, CampType.WHITE)))
                 .isTrue();
     }

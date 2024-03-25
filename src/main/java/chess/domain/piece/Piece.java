@@ -21,10 +21,6 @@ public class Piece {
         return campType.equals(CampType.WHITE);
     }
 
-    public boolean isSameType(String pieceViewName) {
-        return pieceType.name().equals(pieceViewName);
-    }
-
     public boolean isSameColor(Piece whitePiece) {
         return campType.equals(whitePiece.campType);
     }
@@ -35,5 +31,9 @@ public class Piece {
 
     public boolean canMove(Square source, Square destination, Board board) {
         return pieceType.canMove(source, destination, board);
+    }
+
+    public PieceType getPieceType() {
+        return pieceType;
     }
 }
