@@ -1,5 +1,7 @@
 package chess.domain.board;
 
+import chess.domain.board.state.BoardState;
+import chess.domain.board.state.WhiteTurnState;
 import chess.domain.piece.CampType;
 import chess.domain.piece.Piece;
 import chess.domain.piece.PieceType;
@@ -11,15 +13,14 @@ import java.util.Map;
 public class Board {
 
     private static final String NOT_YOUR_TURN_ERROR = "움직이려고 하는 말이 본인 진영의 말이 아닙니다.";
-    private static final String SAME_COLOR_ERROR = "목적지에 같은 편 말이 있어 이동할 수 없습니다.";
     private static final String CANNOT_MOVE_ERROR = "해당 경로로는 말을 이동할 수 없습니다.";
 
     private final Map<Square, Piece> board;
-    private final Turn turn;
+    private BoardState boardState;
 
     public Board() {
         this.board = new BoardFactory().create();
-        this.turn = new Turn();
+        this.boardState = new WhiteTurnState();
     }
 
     public BoardOutput toBoardOutput() {
@@ -32,23 +33,20 @@ public class Board {
 
     public void move(Square source, Square destination) {
         checkMovable(source, destination);
-
         moveOrCatch(source, destination);
-        turn.next();
+        boardState = boardState.nextState();
     }
 
     private void checkMovable(Square source, Square destination) {
         Piece sourcePiece = board.get(source);
         Piece destinationPiece = board.get(destination);
 
-        checkTurn(sourcePiece);
+        checkTurn(sourcePiece, destinationPiece);
         checkCanMove(source, destination, sourcePiece);
-        checkSameColor(sourcePiece, destinationPiece);
     }
 
-    private void checkTurn(Piece sourcePiece) {
-        if (turn.isBlackTurn() && sourcePiece.isWhite() 
-                || turn.isWhiteTurn() && sourcePiece.isBlack()) {
+    private void checkTurn(Piece sourcePiece, Piece destinationPiece) {
+        if (!boardState.checkMovable(sourcePiece, destinationPiece)) {
             throw new IllegalArgumentException(NOT_YOUR_TURN_ERROR);
         }
     }
@@ -56,12 +54,6 @@ public class Board {
     private void checkCanMove(Square source, Square destination, Piece sourcePiece) {
         if (!sourcePiece.canMove(source, destination, this)) {
             throw new IllegalArgumentException(CANNOT_MOVE_ERROR);
-        }
-    }
-
-    private void checkSameColor(Piece sourcePiece, Piece destinationPiece) {
-        if (sourcePiece.isSameColor(destinationPiece)) {
-            throw new IllegalArgumentException(SAME_COLOR_ERROR);
         }
     }
 
