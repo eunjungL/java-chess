@@ -13,9 +13,8 @@ public class BoardFactory {
 
     private static final List<PieceType> PIECE_TYPE_ORDER = List.of(PieceType.ROOK, PieceType.KNIGHT, PieceType.BISHOP,
             PieceType.QUEEN, PieceType.KING, PieceType.BISHOP, PieceType.KNIGHT, PieceType.ROOK);
-    private static final List<Rank> BLACK_PIECE_ZONE = List.of(Rank.SEVEN, Rank.EIGHT);
-    private static final List<Rank> PAWN_ZONE = List.of(Rank.TWO, Rank.SEVEN);
-    private static final List<Rank> NORMAL_PIECE_ZONE = List.of(Rank.ONE, Rank.EIGHT);
+    public static final int EMPTY_PIECE_FROM = 2;
+    public static final int EMPTY_PIECE_TO = 6;
 
     public BoardFactory() {
     }
@@ -23,60 +22,40 @@ public class BoardFactory {
     public Map<Square, Piece> create() {
         Map<Square, Piece> board = new HashMap<>();
 
-        for (Rank rank : Rank.values()) {
-            createPieceByRank(rank, board);
-        }
+        makeBlackPiece(board);
+        makeWhitePiece(board);
+        makeEmptyPiece(board);
 
         return board;
     }
 
-    private void createPieceByRank(Rank rank, Map<Square, Piece> board) {
-        if (NORMAL_PIECE_ZONE.contains(rank)) {
-            createPieceByOrder(rank, board);
-            return;
-        }
-
-        if (PAWN_ZONE.contains(rank)) {
-            createPawnPiece(rank, board);
-            return;
-        }
-
-        createEmptyPiece(rank, board);
-    }
-
-    private void createPawnPiece(Rank rank, Map<Square, Piece> board) {
-        CampType campType = decideColorType(rank);
-
-        for (File file : File.values()) {
-            board.put(Square.of(file, rank), new Piece(PieceType.PAWN, campType));
+    private void makeEmptyPiece(Map<Square, Piece> expected) {
+        for (Rank rank : Arrays.copyOfRange(Rank.values(), EMPTY_PIECE_FROM, EMPTY_PIECE_TO)) {
+            for (File file : File.values()) {
+                expected.put(Square.of(file, rank), new Piece(PieceType.EMPTY, CampType.EMPTY));
+            }
         }
     }
 
-    private void createPieceByOrder(Rank rank, Map<Square, Piece> board) {
-        Iterator<File> fileIterator = Arrays.stream(File.values()).iterator();
+    private void makeBlackPiece(Map<Square, Piece> expected) {
         Iterator<PieceType> pieceTypeIterator = PIECE_TYPE_ORDER.iterator();
-
-        CampType campType = decideColorType(rank);
+        Iterator<File> fileIterator = Arrays.stream(File.values()).iterator();
 
         while (fileIterator.hasNext() && pieceTypeIterator.hasNext()) {
             File file = fileIterator.next();
-            PieceType pieceType = pieceTypeIterator.next();
-
-            board.put(Square.of(file, rank), new Piece(pieceType, campType));
+            expected.put(Square.of(file, Rank.EIGHT), new Piece(pieceTypeIterator.next(), CampType.BLACK));
+            expected.put(Square.of(file, Rank.SEVEN), new Piece(PieceType.PAWN, CampType.BLACK));
         }
     }
 
-    private CampType decideColorType(Rank rank) {
-        if (BLACK_PIECE_ZONE.contains(rank)) {
-            return CampType.BLACK;
-        }
+    private void makeWhitePiece(Map<Square, Piece> expected) {
+        Iterator<File> fileIterator = Arrays.stream(File.values()).iterator();
+        Iterator<PieceType> pieceTypeIterator = PIECE_TYPE_ORDER.iterator();
 
-        return CampType.WHITE;
-    }
-
-    private void createEmptyPiece(Rank rank, Map<Square, Piece> board) {
-        for (File file : File.values()) {
-            board.put(Square.of(file, rank), new Piece(PieceType.EMPTY, CampType.EMPTY));
+        while (fileIterator.hasNext() && pieceTypeIterator.hasNext()) {
+            File file = fileIterator.next();
+            expected.put(Square.of(file, Rank.ONE), new Piece(pieceTypeIterator.next(), CampType.WHITE));
+            expected.put(Square.of(file, Rank.TWO), new Piece(PieceType.PAWN, CampType.WHITE));
         }
     }
 }

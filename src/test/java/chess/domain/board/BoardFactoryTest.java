@@ -33,12 +33,37 @@ public class BoardFactoryTest {
     private Map<Square, Piece> createExpectedBoard() {
         Map<Square, Piece> expected = new HashMap<>();
 
-        List<PieceType> pieceTypeOrder = List.of(PieceType.ROOK, PieceType.KNIGHT, PieceType.BISHOP, PieceType.QUEEN,
-                PieceType.KING, PieceType.BISHOP, PieceType.KNIGHT, PieceType.ROOK);
+        expected.put(Square.of(File.A, Rank.ONE), new Piece(PieceType.ROOK, CampType.WHITE));
+        expected.put(Square.of(File.B, Rank.ONE), new Piece(PieceType.KNIGHT, CampType.WHITE));
+        expected.put(Square.of(File.C, Rank.ONE), new Piece(PieceType.BISHOP, CampType.WHITE));
+        expected.put(Square.of(File.D, Rank.ONE), new Piece(PieceType.QUEEN, CampType.WHITE));
+        expected.put(Square.of(File.E, Rank.ONE), new Piece(PieceType.KING, CampType.WHITE));
+        expected.put(Square.of(File.F, Rank.ONE), new Piece(PieceType.BISHOP, CampType.WHITE));
+        expected.put(Square.of(File.G, Rank.ONE), new Piece(PieceType.KNIGHT, CampType.WHITE));
+        expected.put(Square.of(File.H, Rank.ONE), new Piece(PieceType.ROOK, CampType.WHITE));
 
-        makeWhitePiece(pieceTypeOrder, expected);
-        makeBlackPiece(pieceTypeOrder, expected);
-        makeEmptyPiece(expected);
+        for (File file : File.values()) {
+            expected.put(Square.of(file, Rank.TWO), new Piece(PieceType.PAWN, CampType.WHITE));
+        }
+
+        expected.put(Square.of(File.A, Rank.EIGHT), new Piece(PieceType.ROOK, CampType.BLACK));
+        expected.put(Square.of(File.B, Rank.EIGHT), new Piece(PieceType.KNIGHT, CampType.BLACK));
+        expected.put(Square.of(File.C, Rank.EIGHT), new Piece(PieceType.BISHOP, CampType.BLACK));
+        expected.put(Square.of(File.D, Rank.EIGHT), new Piece(PieceType.QUEEN, CampType.BLACK));
+        expected.put(Square.of(File.E, Rank.EIGHT), new Piece(PieceType.KING, CampType.BLACK));
+        expected.put(Square.of(File.F, Rank.EIGHT), new Piece(PieceType.BISHOP, CampType.BLACK));
+        expected.put(Square.of(File.G, Rank.EIGHT), new Piece(PieceType.KNIGHT, CampType.BLACK));
+        expected.put(Square.of(File.H, Rank.EIGHT), new Piece(PieceType.ROOK, CampType.BLACK));
+
+        for (File file : File.values()) {
+            expected.put(Square.of(file, Rank.SEVEN), new Piece(PieceType.PAWN, CampType.BLACK));
+        }
+
+        for (Rank rank : Arrays.copyOfRange(Rank.values(), 2, 6)) {
+            for (File file : File.values()) {
+                expected.put(Square.of(file, rank), new Piece(PieceType.EMPTY, CampType.EMPTY));
+            }
+        }
 
         return expected;
     }
