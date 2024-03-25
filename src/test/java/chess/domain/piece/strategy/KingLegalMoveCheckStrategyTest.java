@@ -1,7 +1,9 @@
-package chess.domain.strategy;
+package chess.domain.piece.strategy;
 
 import chess.domain.board.Board;
 import chess.domain.piece.Piece;
+import chess.domain.piece.strategy.KingLegalMoveCheckStrategy;
+import chess.domain.piece.strategy.LegalMoveCheckStrategy;
 import chess.domain.square.File;
 import chess.domain.square.Rank;
 import chess.domain.square.Square;

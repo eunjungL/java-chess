@@ -1,14 +1,14 @@
-package chess.domain.strategy;
+package chess.domain.piece.strategy;
 
 import chess.domain.board.Board;
 import chess.domain.square.Square;
 import chess.domain.square.dto.SquareDifferent;
 
-public class BishopLegalMoveCheckStrategy implements LegalMoveCheckStrategy {
+public class RookLegalMoveCheckStrategy implements LegalMoveCheckStrategy {
 
     private final BlockedPathCheckStrategy blockedPathCheckStrategy;
 
-    public BishopLegalMoveCheckStrategy() {
+    public RookLegalMoveCheckStrategy() {
         this.blockedPathCheckStrategy = new BlockedPathCheckStrategy();
     }
 
@@ -20,6 +20,6 @@ public class BishopLegalMoveCheckStrategy implements LegalMoveCheckStrategy {
             return false;
         }
 
-        return Math.abs(diff.fileDiff()) - Math.abs(diff.rankDiff()) == 0;
+        return Math.abs(diff.rankDiff()) == 0 || Math.abs(diff.fileDiff()) == 0;
     }
 }
