@@ -19,7 +19,6 @@ public class Board {
 
     private static final String NOT_YOUR_TURN_ERROR = "움직이려고 하는 말이 본인 진영의 말이 아닙니다.";
     private static final String CANNOT_MOVE_ERROR = "해당 경로로는 말을 이동할 수 없습니다.";
-    private static final double DUPLICATED_PAWN_PENALTY = 0.5;
 
     private final Map<Square, Piece> board;
     private BoardState boardState;
@@ -93,32 +92,44 @@ public class Board {
         return new GameResult(boardState.findWinner(), whiteScore, blackScore);
     }
 
-    private double calculateScoreByCamp(Predicate<Piece> filterByColor) {
-        double totalScore = board.values().stream()
-                .filter(filterByColor)
-                .mapToDouble(Piece::calculateScore)
-                .sum();
+    private double calculateScoreByCamp(Predicate<Piece> filterByCamp) {
+        double totalScore = 0;
 
-        return totalScore - countDuplicatedPawn(filterByColor) * DUPLICATED_PAWN_PENALTY;
+        for (File file : File.values()) {
+            double pawnScore = calculatePawnScore(filterByCamp, file);
+            double notPawnScore = calculateNotPawnScore(filterByCamp, file);
+
+            totalScore += (pawnScore + notPawnScore);
+        }
+
+        return totalScore;
     }
 
-    private long countDuplicatedPawn(Predicate<Piece> filterByColor) {
-        return Arrays.stream(File.values())
-                .mapToLong(file -> countDuplicatedPawnInFile(filterByColor, file))
+    private double calculatePawnScore(Predicate<Piece> filterByCamp, File file) {
+        long countDuplicatedPawn = countDuplicatedPawnInFile(filterByCamp, file);
+
+        return Arrays.stream(Rank.values())
+                .map(rank -> board.get(Square.of(file, rank)))
+                .filter(filterByCamp)
+                .filter(Piece::isPawn)
+                .mapToDouble(piece -> piece.calculateScore(countDuplicatedPawn))
+                .sum();
+    }
+
+    private double calculateNotPawnScore(Predicate<Piece> filterByCamp, File file) {
+        return Arrays.stream(Rank.values())
+                .map(rank -> board.get(Square.of(file, rank)))
+                .filter(filterByCamp)
+                .filter(piece -> !piece.isPawn())
+                .mapToDouble(Piece::calculateScore)
                 .sum();
     }
 
     private long countDuplicatedPawnInFile(Predicate<Piece> filterByColor, File file) {
-        long cutPAwnCount = Arrays.stream(Rank.values())
+        return Arrays.stream(Rank.values())
                 .map(rank -> board.get(Square.of(file, rank)))
                 .filter(filterByColor)
                 .filter(Piece::isPawn)
                 .count();
-
-        if (cutPAwnCount < 2) {
-            return 0;
-        }
-
-        return cutPAwnCount;
     }
 }

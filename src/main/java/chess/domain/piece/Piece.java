@@ -45,6 +45,10 @@ public class Piece {
         return pieceType.getScore();
     }
 
+    public double calculateScore(long duplicatedPawnCount) {
+        return pieceType.getScore(duplicatedPawnCount);
+    }
+
     public PieceType getPieceType() {
         return pieceType;
     }

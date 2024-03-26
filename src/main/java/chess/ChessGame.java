@@ -65,7 +65,6 @@ public class ChessGame {
         }
 
         movePiece(board, createMoveCommand(command));
-
         return true;
     }
 

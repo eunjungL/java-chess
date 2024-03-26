@@ -15,7 +15,7 @@ public enum PieceType {
     EMPTY(new EmptyLegalMoveCheckStrategy(), 0),
     ;
 
-    private static final double PAWN_SCORE_CUNT = 0.5;
+    private static final double PAWN_PENALTY_SCORE = 0.5;
 
     private final LegalMoveCheckStrategy legalMoveCheckStrategy;
     private final double score;
@@ -29,7 +29,15 @@ public enum PieceType {
         return legalMoveCheckStrategy.check(source, destination, board);
     }
 
-    public double getScore(){
+    public double getScore() {
+        return score;
+    }
+
+    public double getScore(double duplicatedPawnCount) {
+        if (this.equals(PieceType.PAWN) && duplicatedPawnCount >= 2) {
+            return PAWN_PENALTY_SCORE;
+        }
+
         return score;
     }
 }
