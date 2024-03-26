@@ -5,7 +5,7 @@ import chess.domain.piece.Piece;
 
 public class GameOverState implements BoardState {
 
-    private static final String UNSUPPORTED_EXCEPTION = "이미 종료된 게임입니다.";
+    private static final String ALREADY_OVER_EXCEPTION = "이미 종료된 게임입니다.";
 
     private final CampType winnerCamp;
 
@@ -15,17 +15,17 @@ public class GameOverState implements BoardState {
 
     @Override
     public BoardState nextTurnState() {
-        throw new UnsupportedOperationException(UNSUPPORTED_EXCEPTION);
+        throw new UnsupportedOperationException(ALREADY_OVER_EXCEPTION);
     }
 
     @Override
     public boolean checkMovable(Piece source, Piece destination) {
-        throw new UnsupportedOperationException(UNSUPPORTED_EXCEPTION);
+        throw new UnsupportedOperationException(ALREADY_OVER_EXCEPTION);
     }
 
     @Override
     public BoardState makeGameOver() {
-        throw new UnsupportedOperationException(UNSUPPORTED_EXCEPTION);
+        throw new UnsupportedOperationException(ALREADY_OVER_EXCEPTION);
     }
 
     @Override
