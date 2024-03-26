@@ -10,6 +10,7 @@ public class InputView {
     private static final String COMMAND_SEPARATOR = " ";
     private static final String END_COMMAND = "end";
     private static final String MOVE_COMMAND = "move";
+    private static final String STATUS_COMMAND = "status";
     private static final String CHESS_GAME_TITLE = String.format("> 체스 게임을 시작합니다.\n" +
             "> 게임 시작 : %s\n" +
             "> 게임 종료 : %s\n" +
@@ -41,7 +42,7 @@ public class InputView {
     public List<String> readCommand() {
         List<String> command = List.of(scanner.nextLine().split(COMMAND_SEPARATOR));
 
-        if (!List.of(MOVE_COMMAND, END_COMMAND).contains(command.get(0))) {
+        if (!List.of(MOVE_COMMAND, END_COMMAND, STATUS_COMMAND).contains(command.get(0))) {
             throw new IllegalArgumentException(INVALID_COMMAND_ERROR);
         }
 

@@ -1,6 +1,7 @@
 package chess;
 
 import chess.domain.board.Board;
+import chess.domain.board.dto.GameResult;
 import chess.domain.piece.Piece;
 import chess.domain.square.File;
 import chess.domain.square.Rank;
@@ -54,13 +55,23 @@ public class ChessGame {
     private boolean loopWhileEnd(Board board) {
         List<String> command = inputView.readCommand();
 
-        if (command.size() == 1) {
+        if (command.size() == 1 && command.get(0).equals("end")) {
             return false;
+        }
+
+        if (command.size() == 1 && command.get(0).equals("status")) {
+            printGameResult(board);
+            return true;
         }
 
         movePiece(board, createMoveCommand(command));
 
         return true;
+    }
+
+    private void printGameResult(Board board) {
+        GameResult gameResult = board.createGameResult();
+        outputView.writeGameResult(gameResult);
     }
 
     private MoveCommand createMoveCommand(List<String> command) {
