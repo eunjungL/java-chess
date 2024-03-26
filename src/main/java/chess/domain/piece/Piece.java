@@ -37,6 +37,10 @@ public class Piece {
         return pieceType.equals(PieceType.KING);
     }
 
+    public boolean isPawn() {
+        return pieceType.equals(PieceType.PAWN);
+    }
+
     public double calculateScore() {
         return pieceType.getScore();
     }

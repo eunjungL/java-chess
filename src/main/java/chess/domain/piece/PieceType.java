@@ -15,6 +15,8 @@ public enum PieceType {
     EMPTY(new EmptyLegalMoveCheckStrategy(), 0),
     ;
 
+    private static final double PAWN_SCORE_CUNT = 0.5;
+
     private final LegalMoveCheckStrategy legalMoveCheckStrategy;
     private final double score;
 

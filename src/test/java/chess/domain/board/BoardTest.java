@@ -140,7 +140,7 @@ public class BoardTest {
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
-    @DisplayName("보드는 한 진영의 킹이 잡히면 게임 종료 상태로 변경된다.")
+    @DisplayName("체스판은 한 진영의 킹이 잡히면 게임 종료 상태로 변경된다.")
     @Test
     void makeGameOverTurn() {
         // given
@@ -157,7 +157,7 @@ public class BoardTest {
         assertThat(board).extracting("boardState").isInstanceOf(GameOverState.class);
     }
 
-    @DisplayName("보드는 게임이 끝난 후 남아있는 말들의 점수를 계산한다.")
+    @DisplayName("체스판은 게임이 끝난 후 남아있는 말들의 점수를 계산한다.")
     @Test
     void calculateScore() {
         // given
@@ -171,7 +171,31 @@ public class BoardTest {
         GameResult expected = new GameResult(CampType.BLACK, 38, 38);
 
         // when
-        GameResult actual = board.calculateGameResult();
+        GameResult actual = board.createGameResult();
+
+        // then
+        assertThat(actual).isEqualTo(expected);
+    }
+
+    @DisplayName("보드는 게임이 끝난 후 남아있는 말들의 점수(특수한 폰 점수 포함)를 계산한다.")
+    @Test
+    void calculateScorePawnScoreCut() {
+        // given
+        board.move(Square.of(File.B, Rank.TWO), Square.of(File.B, Rank.FOUR));
+        board.move(Square.of(File.A, Rank.SEVEN), Square.of(File.A, Rank.FIVE));
+        board.move(Square.of(File.B, Rank.FOUR), Square.of(File.A, Rank.FIVE));
+        board.move(Square.of(File.C, Rank.SEVEN), Square.of(File.C, Rank.FIVE));
+        board.move(Square.of(File.F, Rank.TWO), Square.of(File.F, Rank.THREE));
+        board.move(Square.of(File.E, Rank.SEVEN), Square.of(File.E, Rank.FIVE));
+        board.move(Square.of(File.G, Rank.TWO), Square.of(File.G, Rank.FOUR));
+        board.move(Square.of(File.D, Rank.EIGHT), Square.of(File.H, Rank.FOUR));
+        board.move(Square.of(File.H, Rank.TWO), Square.of(File.H, Rank.THREE));
+        board.move(Square.of(File.H, Rank.FOUR), Square.of(File.E, Rank.ONE));
+
+        GameResult expected = new GameResult(CampType.BLACK, 37, 37);
+
+        // when
+        GameResult actual = board.createGameResult();
 
         // then
         assertThat(actual).isEqualTo(expected);
