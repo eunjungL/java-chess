@@ -1,14 +1,16 @@
 package chess.domain.board;
 
+import chess.domain.board.dto.BoardOutput;
+import chess.domain.board.dto.GameResult;
 import chess.domain.board.state.BoardState;
 import chess.domain.board.state.WhiteTurnState;
 import chess.domain.piece.CampType;
 import chess.domain.piece.Piece;
 import chess.domain.piece.PieceType;
 import chess.domain.square.Square;
-import chess.domain.board.dto.BoardOutput;
 
 import java.util.Map;
+import java.util.function.Predicate;
 
 public class Board {
 
@@ -78,5 +80,19 @@ public class Board {
         }
 
         return boardState.nextTurnState();
+    }
+
+    public GameResult calculateGameResult() {
+        double whiteScore = sumScoreByCamp(Piece::isWhite);
+        double blackScore = sumScoreByCamp(Piece::isBlack);
+
+        return new GameResult(boardState.findWinner(), whiteScore, blackScore);
+    }
+
+    private double sumScoreByCamp(Predicate<Piece> filterByColor) {
+        return board.values().stream()
+                .filter(filterByColor)
+                .mapToDouble(Piece::calculateScore)
+                .sum();
     }
 }

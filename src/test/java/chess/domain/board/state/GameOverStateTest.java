@@ -7,6 +7,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @DisplayName("게임 종료 상태")
@@ -36,5 +37,15 @@ class GameOverStateTest {
         // when & then
         assertThatThrownBy(() -> boardState.checkMovable(source, destination))
                 .isInstanceOf(UnsupportedOperationException.class);
+    }
+
+    @DisplayName("게임 종료 상태에서 우승자를 반환한다. ")
+    @Test
+    void findWinner() {
+        // when
+        CampType actual = boardState.findWinner();
+
+        // then
+        assertThat(actual).isEqualTo(CampType.WHITE);
     }
 }

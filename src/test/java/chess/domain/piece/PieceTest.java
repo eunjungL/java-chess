@@ -29,4 +29,17 @@ public class PieceTest {
         // then
         assertThat(actual).isFalse();
     }
+
+    @DisplayName("체스말은 타입에 따른 점수를 반환한다.")
+    @Test
+    void calculateScore() {
+        // given
+        Piece queen = new Piece(PieceType.QUEEN, CampType.WHITE);
+
+        // when
+        double actual = queen.calculateScore();
+
+        // then
+        assertThat(actual).isEqualTo(9);
+    }
 }

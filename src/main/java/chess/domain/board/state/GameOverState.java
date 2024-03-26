@@ -27,4 +27,9 @@ public class GameOverState implements BoardState {
     public BoardState makeGameOver() {
         throw new UnsupportedOperationException(UNSUPPORTED_EXCEPTION);
     }
+
+    @Override
+    public CampType findWinner() {
+        return winnerCamp;
+    }
 }

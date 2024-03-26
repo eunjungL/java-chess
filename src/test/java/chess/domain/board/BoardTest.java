@@ -1,6 +1,7 @@
 package chess.domain.board;
 
 import chess.domain.board.dto.BoardOutput;
+import chess.domain.board.dto.GameResult;
 import chess.domain.board.state.GameOverState;
 import chess.domain.piece.CampType;
 import chess.domain.piece.Piece;
@@ -154,5 +155,25 @@ public class BoardTest {
 
         // then
         assertThat(board).extracting("boardState").isInstanceOf(GameOverState.class);
+    }
+
+    @DisplayName("보드는 게임이 끝난 후 남아있는 말들의 점수를 계산한다.")
+    @Test
+    void calculateScore() {
+        // given
+        board.move(Square.of(File.F, Rank.TWO), Square.of(File.F, Rank.THREE));
+        board.move(Square.of(File.E, Rank.SEVEN), Square.of(File.E, Rank.FIVE));
+        board.move(Square.of(File.G, Rank.TWO), Square.of(File.G, Rank.FOUR));
+        board.move(Square.of(File.D, Rank.EIGHT), Square.of(File.H, Rank.FOUR));
+        board.move(Square.of(File.H, Rank.TWO), Square.of(File.H, Rank.THREE));
+        board.move(Square.of(File.H, Rank.FOUR), Square.of(File.E, Rank.ONE));
+
+        GameResult expected = new GameResult(CampType.BLACK, 38, 38);
+
+        // when
+        GameResult actual = board.calculateGameResult();
+
+        // then
+        assertThat(actual).isEqualTo(expected);
     }
 }

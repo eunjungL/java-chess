@@ -8,6 +8,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @DisplayName("검은색 말 차례")
 public class BlackTurnStateTest {
@@ -51,5 +52,12 @@ public class BlackTurnStateTest {
 
         // then
         assertThat(actual).isTrue();
+    }
+
+    @DisplayName("검은색 말 차례에서 우승자를 찾으려고하면 예외가 발생한다.")
+    @Test
+    void findWinnerException() {
+        // when & then
+        assertThatThrownBy(() -> boardState.findWinner()).isInstanceOf(UnsupportedOperationException.class);
     }
 }

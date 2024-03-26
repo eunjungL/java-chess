@@ -37,6 +37,10 @@ public class Piece {
         return pieceType.equals(PieceType.KING);
     }
 
+    public double calculateScore() {
+        return pieceType.getScore();
+    }
+
     public PieceType getPieceType() {
         return pieceType;
     }
