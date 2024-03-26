@@ -1,6 +1,7 @@
 package chess.domain.board;
 
 import chess.domain.board.dto.BoardOutput;
+import chess.domain.board.state.GameOverState;
 import chess.domain.piece.CampType;
 import chess.domain.piece.Piece;
 import chess.domain.piece.PieceType;
@@ -136,5 +137,22 @@ public class BoardTest {
         // when & then
         assertThatThrownBy(() -> board.move(Square.of(File.G, Rank.FOUR), Square.of(File.G, Rank.FIVE)))
                 .isInstanceOf(IllegalArgumentException.class);
+    }
+
+    @DisplayName("보드는 한 진영의 킹이 잡히면 게임 종료 상태로 변경된다.")
+    @Test
+    void makeGameOverTurn() {
+        // given
+        board.move(Square.of(File.F, Rank.TWO), Square.of(File.F, Rank.THREE));
+        board.move(Square.of(File.E, Rank.SEVEN), Square.of(File.E, Rank.FIVE));
+        board.move(Square.of(File.G, Rank.TWO), Square.of(File.G, Rank.FOUR));
+        board.move(Square.of(File.D, Rank.EIGHT), Square.of(File.H, Rank.FOUR));
+        board.move(Square.of(File.H, Rank.TWO), Square.of(File.H, Rank.THREE));
+
+        // when
+        board.move(Square.of(File.H, Rank.FOUR), Square.of(File.E, Rank.ONE));
+
+        // then
+        assertThat(board).extracting("boardState").isInstanceOf(GameOverState.class);
     }
 }

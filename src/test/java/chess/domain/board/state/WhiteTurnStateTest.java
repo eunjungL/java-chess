@@ -1,8 +1,5 @@
-package chess.domain.board;
+package chess.domain.board.state;
 
-import chess.domain.board.state.BlackTurnState;
-import chess.domain.board.state.BoardState;
-import chess.domain.board.state.WhiteTurnState;
 import chess.domain.piece.CampType;
 import chess.domain.piece.Piece;
 import chess.domain.piece.PieceType;
@@ -26,10 +23,20 @@ public class WhiteTurnStateTest {
     @Test
     void nextState() {
         // when
-        BoardState actual = boardState.nextState();
+        BoardState actual = boardState.nextTurnState();
 
         // then
         assertThat(actual).isInstanceOf(BlackTurnState.class);
+    }
+
+    @DisplayName("흰색 말 차례에서 게임이 종료되면 게임 종료 상태를 반환한다.")
+    @Test
+    void gameOverState() {
+        // when
+        BoardState actual = boardState.makeGameOver();
+
+        // then
+        assertThat(actual).isInstanceOf(GameOverState.class);
     }
 
     @DisplayName("출발지의 말이 본인의 진영이고 도착지의 말이 본인의 진영이 아닌지 확인한다.")

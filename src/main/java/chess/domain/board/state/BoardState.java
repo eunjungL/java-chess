@@ -4,6 +4,7 @@ import chess.domain.piece.Piece;
 
 public interface BoardState {
 
-    BoardState nextState();
+    BoardState nextTurnState();
     boolean checkMovable(Piece source, Piece destination);
+    BoardState makeGameOver();
 }

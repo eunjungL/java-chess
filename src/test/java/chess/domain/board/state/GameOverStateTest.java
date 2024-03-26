@@ -16,14 +16,14 @@ class GameOverStateTest {
 
     @BeforeEach
     void setUp() {
-        boardState = new GameOverState();
+        boardState = new GameOverState(CampType.WHITE);
     }
 
     @DisplayName("게임 종료 상태에서 상태 변환을 시도하면 예외가 발생한다.")
     @Test
     void nextStateException() {
         // when & then
-        assertThatThrownBy(() -> boardState.nextState()).isInstanceOf(UnsupportedOperationException.class);
+        assertThatThrownBy(() -> boardState.nextTurnState()).isInstanceOf(UnsupportedOperationException.class);
     }
 
     @DisplayName("게임 종료 상태에서 움직임 가능 여부를 확인하면 예외가 발생한다.")

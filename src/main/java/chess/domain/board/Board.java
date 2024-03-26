@@ -34,7 +34,6 @@ public class Board {
     public void move(Square source, Square destination) {
         checkMovable(source, destination);
         moveOrCatch(source, destination);
-        boardState = boardState.nextState();
     }
 
     private void checkMovable(Square source, Square destination) {
@@ -64,10 +63,20 @@ public class Board {
         if (destinationPiece.isNotEmpty()) {
             board.replace(source, new Piece(PieceType.EMPTY, CampType.EMPTY));
             board.replace(destination, sourcePiece);
+            boardState = checkGameOver(destinationPiece);
             return;
         }
 
         board.replace(source, destinationPiece);
         board.replace(destination, sourcePiece);
+        boardState = boardState.nextTurnState();
+    }
+
+    private BoardState checkGameOver(Piece destinationPiece) {
+        if (destinationPiece.isKing()) {
+            return boardState.makeGameOver();
+        }
+
+        return boardState.nextTurnState();
     }
 }

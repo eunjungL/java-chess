@@ -33,6 +33,10 @@ public class Piece {
         return pieceType.canMove(source, destination, board);
     }
 
+    public boolean isKing() {
+        return pieceType.equals(PieceType.KING);
+    }
+
     public PieceType getPieceType() {
         return pieceType;
     }
