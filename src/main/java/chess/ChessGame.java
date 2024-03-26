@@ -12,6 +12,7 @@ import chess.util.RetryUtil;
 import chess.view.InputView;
 import chess.view.OutputView;
 import chess.view.PieceName;
+import chess.view.dto.Command;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,9 +29,9 @@ public class ChessGame {
     }
 
     public void play() {
-        String progressCommand = RetryUtil.retryUntilNoException(inputView::readProgressCommand);
+        Command progressCommand = RetryUtil.retryUntilNoException(inputView::readProgressCommand);
 
-        if (!isStartCommand(progressCommand)) {
+        if (progressCommand.isEndCommand()) {
             return;
         }
 
@@ -53,13 +54,13 @@ public class ChessGame {
     }
 
     private boolean loopWhileEnd(Board board) {
-        List<String> command = inputView.readCommand();
+        Command command = inputView.readCommand();
 
-        if (command.size() == 1 && command.get(0).equals("end")) {
+        if (command.isEndCommand()) {
             return false;
         }
 
-        if (command.size() == 1 && command.get(0).equals("status")) {
+        if (command.isStatusCommand()) {
             printGameResult(board);
             return true;
         }
@@ -73,9 +74,9 @@ public class ChessGame {
         outputView.writeGameResult(gameResult);
     }
 
-    private MoveCommand createMoveCommand(List<String> command) {
-        Square source = Square.from(new SquareCreateCommand(command.get(1)));
-        Square destination = Square.from(new SquareCreateCommand(command.get(2)));
+    private MoveCommand createMoveCommand(Command command) {
+        Square source = Square.from(new SquareCreateCommand(command.source()));
+        Square destination = Square.from(new SquareCreateCommand(command.destination()));
 
         return new MoveCommand(source, destination);
     }

@@ -1,13 +1,15 @@
 package chess.view;
 
+import chess.view.dto.Command;
+
 import java.util.List;
 import java.util.Scanner;
 
 public class InputView {
 
-    public static final String START_COMMAND = "start";
     private static final String INVALID_COMMAND_ERROR = "잘못된 명령어 입력입니다. 'end' 혹은 'move source 위치 target 위치'로 입력해주세요.";
     private static final String COMMAND_SEPARATOR = " ";
+    public static final String START_COMMAND = "start";
     private static final String END_COMMAND = "end";
     private static final String MOVE_COMMAND = "move";
     private static final String STATUS_COMMAND = "status";
@@ -23,14 +25,13 @@ public class InputView {
         this.scanner = new Scanner(System.in);
     }
 
-    public String readProgressCommand() {
+    public Command readProgressCommand() {
         System.out.println(CHESS_GAME_TITLE);
 
-        String command = scanner.nextLine();
+        String input = scanner.nextLine();
+        validateProgressCommand(input);
 
-        validateProgressCommand(command);
-
-        return command;
+        return new Command(input);
     }
 
     private void validateProgressCommand(String command) {
@@ -39,13 +40,17 @@ public class InputView {
         }
     }
 
-    public List<String> readCommand() {
-        List<String> command = List.of(scanner.nextLine().split(COMMAND_SEPARATOR));
+    public Command readCommand() {
+        List<String> input = List.of(scanner.nextLine().split(COMMAND_SEPARATOR));
 
-        if (!List.of(MOVE_COMMAND, END_COMMAND, STATUS_COMMAND).contains(command.get(0))) {
+        if (!List.of(MOVE_COMMAND, END_COMMAND, STATUS_COMMAND).contains(input.get(0))) {
             throw new IllegalArgumentException(INVALID_COMMAND_ERROR);
         }
 
-        return command;
+        if (input.size() == 1) {
+            return new Command(input.get(0));
+        }
+
+        return new Command(input.get(0), input.get(1), input.get(2));
     }
 }
