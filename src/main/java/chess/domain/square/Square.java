@@ -39,6 +39,14 @@ public class Square {
         return POOL.get(toKey(file, rank));
     }
 
+    public static Square from(String key) {
+        if (!POOL.containsKey(key)) {
+            throw new IllegalArgumentException("존재하지 않는 키입니다.");
+        }
+
+        return POOL.get(key);
+    }
+
     private static void validateRank(String rankValue) {
         if (!INTEGER_FORMAT_REGEX.matcher(rankValue).matches()) {
             throw new IllegalArgumentException(INVALID_RANK_ERROR);
@@ -78,5 +86,9 @@ public class Square {
 
     public boolean isSameRank(Rank rank) {
         return this.rank.equals(rank);
+    }
+
+    public String getKey() {
+        return file.name() + rank.name();
     }
 }

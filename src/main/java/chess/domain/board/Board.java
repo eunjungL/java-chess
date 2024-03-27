@@ -24,7 +24,8 @@ public class Board {
     private BoardState boardState;
 
     public Board() {
-        this.board = new BoardFactory().create();
+        // TODO: boardId 1 하드 코딩 된 부분 처리
+        this.board = new BoardFactory().create(1);
         this.boardState = new WhiteTurnState();
     }
 

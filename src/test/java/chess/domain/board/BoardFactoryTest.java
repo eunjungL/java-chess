@@ -22,9 +22,10 @@ public class BoardFactoryTest {
         // given
         Map<Square, Piece> expected = createExpectedBoard();
         BoardFactory boardFactory = new BoardFactory();
+        int boardId = 1;
 
         // when
-        Map<Square, Piece> actual = boardFactory.create();
+        Map<Square, Piece> actual = boardFactory.create(boardId);
 
         // then
         assertThat(actual).usingRecursiveComparison().isEqualTo(expected);

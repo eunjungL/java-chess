@@ -4,6 +4,8 @@ import chess.domain.board.Board;
 import chess.domain.piece.strategy.*;
 import chess.domain.square.Square;
 
+import java.util.Arrays;
+
 public enum PieceType {
 
     KING(new KingLegalMoveCheckStrategy(), 0),
@@ -39,5 +41,12 @@ public enum PieceType {
         }
 
         return score;
+    }
+
+    public static PieceType findPieceTypeByName(String name) {
+        return Arrays.stream(PieceType.values())
+                .filter(pieceType -> pieceType.name().equals(name))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 체스말 종류입니다."));
     }
 }
