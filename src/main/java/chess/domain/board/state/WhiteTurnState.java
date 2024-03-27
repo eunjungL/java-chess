@@ -26,4 +26,9 @@ public class WhiteTurnState implements BoardState {
     public CampType findWinner() {
         throw new UnsupportedOperationException(GAME_NOT_OVER_EXCEPTION);
     }
+
+    @Override
+    public StateName getSateName() {
+        return StateName.WHITE_TURN;
+    }
 }

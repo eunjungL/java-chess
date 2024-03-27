@@ -21,15 +21,15 @@ public class BoardDao {
         this.pieceDao = new PieceDao();
     }
 
-    public void savePieceBySquare(int boardId, Square square, Piece piece) {
+    public void savePieceBySquare(int gameId, Square square, Piece piece) {
         Connection connection = DBConnection.getConnection();
 
         try {
             int pieceId = pieceDao.findPieceIdByPiece(piece)
                     .orElseGet(() -> createNewPiece(piece));
 
-            PreparedStatement statement = connection.prepareStatement("INSERT INTO board (id, square, piece_id) VALUES (?, ?, ?)");
-            statement.setString(1, String.valueOf(boardId));
+            PreparedStatement statement = connection.prepareStatement("INSERT INTO board (game_id, square, piece_id) VALUES (?, ?, ?)");
+            statement.setString(1, String.valueOf(gameId));
             statement.setString(2, square.getKey());
             statement.setString(3, String.valueOf(pieceId));
 
@@ -47,12 +47,12 @@ public class BoardDao {
                 .orElseThrow(() -> new RuntimeException("piece를 새로 생성하고 가져오는 과정에서 오류가 발생했습니다."));
     }
 
-    public Optional<Map<Square, Piece>> findBoardById(int id) {
+    public Optional<Map<Square, Piece>> findBoardByGameId(int gameId) {
         Connection connection = DBConnection.getConnection();
 
         try {
-            PreparedStatement statement = connection.prepareStatement("SELECT * FROM board WHERE id = ?");
-            statement.setString(1, String.valueOf(id));
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM board WHERE game_id = ?");
+            statement.setString(1, String.valueOf(gameId));
 
             ResultSet resultSet = statement.executeQuery();
 
@@ -74,16 +74,16 @@ public class BoardDao {
         }
     }
 
-    public void updateBoardBySquare(int boardId, Square square, Piece piece) {
+    public void updateBoardBySquare(int gameId, Square square, Piece piece) {
         Connection connection = DBConnection.getConnection();
 
         int pieceId = pieceDao.findPieceIdByPiece(piece)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 체스말입니다."));
 
         try {
-            PreparedStatement statement = connection.prepareStatement("UPDATE board SET piece_id = ? WHERE id = ? AND square = ?");
+            PreparedStatement statement = connection.prepareStatement("UPDATE board SET piece_id = ? WHERE game_id = ? AND square = ?");
             statement.setString(1, String.valueOf(pieceId));
-            statement.setString(2, String.valueOf(boardId));
+            statement.setString(2, String.valueOf(gameId));
             statement.setString(3, square.getKey());
 
             statement.executeUpdate();

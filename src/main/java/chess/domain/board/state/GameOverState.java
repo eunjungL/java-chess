@@ -32,4 +32,9 @@ public class GameOverState implements BoardState {
     public CampType findWinner() {
         return winnerCamp;
     }
+
+    @Override
+    public StateName getSateName() {
+        return StateName.GAME_OVER;
+    }
 }

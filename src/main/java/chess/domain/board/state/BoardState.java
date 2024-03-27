@@ -9,4 +9,5 @@ public interface BoardState {
     boolean checkMovable(Piece source, Piece destination);
     BoardState makeGameOver();
     CampType findWinner();
+    StateName getSateName();
 }

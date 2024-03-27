@@ -1,0 +1,37 @@
+package chess;
+
+import chess.domain.board.state.StateName;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+
+import static org.assertj.core.api.Assertions.assertThatCode;
+
+@DisplayName("게임 DAO")
+class GameDaoTest {
+
+    private GameDao gameDao;
+
+    @BeforeEach
+    void setUp() {
+        gameDao = new GameDao();
+    }
+
+    @DisplayName("게임 DAO는 새로운 게임을 생성한다.")
+    @Test
+    void createGame() {
+        // when & then
+        assertThatCode(() -> gameDao.createGame()).doesNotThrowAnyException();
+    }
+
+    @DisplayName("게임 DAO는 게임의 상태를 변경한다.")
+    @Test
+    void updateStateById() {
+        // given
+        int gameId = 1;
+        StateName stateName = StateName.BLACK_TURN;
+
+        // when & then
+        assertThatCode(() -> gameDao.updateStateById(gameId, stateName)).doesNotThrowAnyException();
+    }
+}

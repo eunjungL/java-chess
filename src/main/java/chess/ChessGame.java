@@ -41,10 +41,6 @@ public class ChessGame {
         playUntilEnd(board);
     }
 
-    private boolean isStartCommand(String progressCommand) {
-        return progressCommand.equals(InputView.START_COMMAND);
-    }
-
     private void playUntilEnd(Board board) {
         boolean run = true;
 

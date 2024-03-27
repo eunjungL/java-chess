@@ -48,7 +48,7 @@ class BoardDaoTest {
         int id = 1;
 
         // when
-        Optional<Map<Square, Piece>> board = boardDao.findBoardById(id);
+        Optional<Map<Square, Piece>> board = boardDao.findBoardByGameId(id);
 
         // then
         assertThat(board.get().size()).isEqualTo(64);
@@ -58,7 +58,7 @@ class BoardDaoTest {
     @Test
     void updateBoardBySquare() {
         // given
-        int boardId = 1;
+        int gameId = 1;
 
         Square source = Square.of(File.A, Rank.SEVEN);
         Square destination = Square.of(File.A, Rank.FIVE);
@@ -68,8 +68,8 @@ class BoardDaoTest {
 
         // when & then
         assertAll(
-                () -> boardDao.updateBoardBySquare(boardId, source, destinationPiece),
-                () -> boardDao.updateBoardBySquare(boardId, destination, sourcePiece)
+                () -> boardDao.updateBoardBySquare(gameId, source, destinationPiece),
+                () -> boardDao.updateBoardBySquare(gameId, destination, sourcePiece)
         );
     }
 }
