@@ -35,11 +35,24 @@ public class ChessGame {
             return;
         }
 
-        int gameId = 1; // TODO: gameId 1로 하드 코딩 된 부분 처리
-        Board board = new Board(gameId);
+        Board board = createBoardByGameCommand(readGameCommand());
         printBoardOutput(board);
 
         playUntilEnd(board);
+    }
+
+    private Command readGameCommand() {
+        List<String> gameIds = new GameDao().findAllIds();
+        return RetryUtil.retryUntilNoException(() -> inputView.readGameCommand(gameIds));
+    }
+
+    private Board createBoardByGameCommand(Command gameCommand) {
+        if (gameCommand.isEnterCommand()) {
+            int gameId = Integer.parseInt(gameCommand.source());
+            return new Board(gameId);
+        }
+
+        return new Board();
     }
 
     private void playUntilEnd(Board board) {

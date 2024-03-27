@@ -4,6 +4,8 @@ import chess.domain.board.state.*;
 import chess.domain.piece.CampType;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class GameDao {
 
@@ -91,5 +93,23 @@ public class GameDao {
         }
 
         throw new IllegalArgumentException("존재하지 않는 상태입니다.");
+    }
+
+    public List<String> findAllIds() {
+        Connection connection = DBConnection.getConnection();
+
+        try {
+            PreparedStatement statement = connection.prepareStatement("SELECT id FROM game");
+            ResultSet resultSet = statement.executeQuery();
+
+            List<String> gameIds = new ArrayList<>();
+            while (resultSet.next()) {
+                gameIds.add(resultSet.getString("id"));
+            }
+
+            return gameIds;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

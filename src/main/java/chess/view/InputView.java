@@ -8,11 +8,14 @@ import java.util.Scanner;
 public class InputView {
 
     private static final String INVALID_COMMAND_ERROR = "잘못된 명령어 입력입니다. 'end' 혹은 'move source 위치 target 위치'로 입력해주세요.";
+    private static final String INVALID_GAME_COMMAND_ERROR = "잘못된 명령어 입력입니다. 'enter' 혹은 'create gameId'로 입력해주세요.";
     private static final String COMMAND_SEPARATOR = " ";
     public static final String START_COMMAND = "start";
     private static final String END_COMMAND = "end";
     private static final String MOVE_COMMAND = "move";
     private static final String STATUS_COMMAND = "status";
+    private static final String GAME_CREATE_COMMAND = "create";
+    private static final String GAME_ENTER_COMMAND = "enter";
     private static final String CHESS_GAME_TITLE = String.format("> 체스 게임을 시작합니다.\n" +
             "> 게임 시작 : %s\n" +
             "> 게임 종료 : %s\n" +
@@ -40,17 +43,39 @@ public class InputView {
         }
     }
 
+    public Command readGameCommand(List<String> gameIds) {
+        System.out.printf("> 새로운 게임 시작하기 : create - 예. create %n" +
+                "> 게임 이어서 시작하기 : enter (입장 가능한 game: %s) - 예. enter 1 %n", String.join(" ", gameIds));
+
+        List<String> input = List.of(scanner.nextLine().split(COMMAND_SEPARATOR));
+
+        String command = input.get(0);
+
+        if (!List.of(GAME_CREATE_COMMAND, GAME_ENTER_COMMAND).contains(command)) {
+            throw new IllegalArgumentException(INVALID_GAME_COMMAND_ERROR);
+        }
+
+        if (input.size() == 1) {
+            return new Command(command);
+        }
+
+        return new Command(command, input.get(1));
+    }
+
     public Command readCommand() {
         List<String> input = List.of(scanner.nextLine().split(COMMAND_SEPARATOR));
 
-        if (!List.of(MOVE_COMMAND, END_COMMAND, STATUS_COMMAND).contains(input.get(0))) {
+        String command = input.get(0);
+
+        if (!List.of(MOVE_COMMAND, END_COMMAND, STATUS_COMMAND,
+                GAME_CREATE_COMMAND, GAME_ENTER_COMMAND).contains(command)) {
             throw new IllegalArgumentException(INVALID_COMMAND_ERROR);
         }
 
         if (input.size() == 1) {
-            return new Command(input.get(0));
+            return new Command(command);
         }
 
-        return new Command(input.get(0), input.get(1), input.get(2));
+        return new Command(command, input.get(1), input.get(2));
     }
 }
