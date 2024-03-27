@@ -5,7 +5,6 @@ import chess.domain.board.dao.BoardDao;
 import chess.domain.board.dto.BoardOutput;
 import chess.domain.board.dto.GameResult;
 import chess.domain.board.state.BoardState;
-import chess.domain.board.state.WhiteTurnState;
 import chess.domain.piece.CampType;
 import chess.domain.piece.Piece;
 import chess.domain.piece.PieceType;
@@ -22,18 +21,28 @@ public class Board {
     private static final String NOT_YOUR_TURN_ERROR = "움직이려고 하는 말이 본인 진영의 말이 아닙니다.";
     private static final String CANNOT_MOVE_ERROR = "해당 경로로는 말을 이동할 수 없습니다.";
 
-    // TODO: gameId 1 하드 코딩 된 부분 처리
-    private final int gameId = 1;
+    private final int gameId;
     private final BoardDao boardDao;
     private final GameDao gameDao;
     private final Map<Square, Piece> board;
     private BoardState boardState;
 
     public Board() {
-        this.board = new BoardFactory().create(gameId);
-        this.boardState = new WhiteTurnState();
         this.boardDao = new BoardDao();
         this.gameDao = new GameDao();
+
+        this.gameId = gameDao.createGame();
+        this.board = new BoardFactory().create(gameId);
+        this.boardState = gameDao.findStateById(gameId);
+    }
+
+    public Board(int gameId) {
+        this.boardDao = new BoardDao();
+        this.gameDao = new GameDao();
+
+        this.gameId = gameId;
+        this.board = new BoardFactory().create(gameId);
+        this.boardState = gameDao.findStateById(gameId);
     }
 
     public BoardOutput toBoardOutput() {

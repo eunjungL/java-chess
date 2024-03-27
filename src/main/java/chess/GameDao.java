@@ -1,22 +1,27 @@
 package chess;
 
-import chess.domain.board.state.StateName;
+import chess.domain.board.state.*;
 import chess.domain.piece.CampType;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
 
 public class GameDao {
 
-    public void createGame() {
+    public int createGame() {
         Connection connection = DBConnection.getConnection();
 
         try {
-            PreparedStatement statement = connection.prepareStatement("INSERT INTO game (winner_camp) VALUES (?)");
+            PreparedStatement statement = connection.prepareStatement("INSERT INTO game (winner_camp) VALUES (?)",
+                    Statement.RETURN_GENERATED_KEYS);
             statement.setString(1, null);
 
             statement.executeUpdate();
+            ResultSet resultSet =  statement.getGeneratedKeys();
+            if (resultSet.next()) {
+                return resultSet.getInt(1);
+            }
+
+            throw new SQLException();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -49,5 +54,42 @@ public class GameDao {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public BoardState findStateById(int gameId) {
+        Connection connection = DBConnection.getConnection();
+
+        try {
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM game WHERE id = ?");
+            statement.setString(1, String.valueOf(gameId));
+
+            ResultSet resultSet = statement.executeQuery();
+
+            if (resultSet.next()) {
+                String stateName = resultSet.getString("state");
+                return makeBoardState(stateName, resultSet);
+            }
+
+            throw new IllegalArgumentException("존재하지 않는 게임입니다.");
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private BoardState makeBoardState(String stateName, ResultSet resultSet) throws SQLException {
+        if (stateName.equals(StateName.BLACK_TURN.name())) {
+            return new BlackTurnState();
+        }
+
+        if (stateName.equals(StateName.WHITE_TURN.name())) {
+            return new WhiteTurnState();
+        }
+
+        if (stateName.equals(StateName.GAME_OVER.name())) {
+            String winnerCampName = resultSet.getString("winner_camp");
+            return new GameOverState(CampType.findCampTypeByName(winnerCampName));
+        }
+
+        throw new IllegalArgumentException("존재하지 않는 상태입니다.");
     }
 }

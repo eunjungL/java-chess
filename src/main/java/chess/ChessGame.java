@@ -35,7 +35,8 @@ public class ChessGame {
             return;
         }
 
-        Board board = new Board();
+        int gameId = 1; // TODO: gameId 1로 하드 코딩 된 부분 처리
+        Board board = new Board(gameId);
         printBoardOutput(board);
 
         playUntilEnd(board);

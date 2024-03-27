@@ -22,10 +22,10 @@ public class BoardFactoryTest {
         // given
         Map<Square, Piece> expected = createExpectedBoard();
         BoardFactory boardFactory = new BoardFactory();
-        int gameId = 1;
 
         // when
-        Map<Square, Piece> actual = boardFactory.create(gameId);
+        // TODO: DB 영향 받아서 테스트 깨지는 부분 해결하기
+        Map<Square, Piece> actual = boardFactory.create(1);
 
         // then
         assertThat(actual).usingRecursiveComparison().isEqualTo(expected);

@@ -1,11 +1,14 @@
 package chess;
 
+import chess.domain.board.state.BlackTurnStateTest;
+import chess.domain.board.state.BoardState;
 import chess.domain.board.state.StateName;
 import chess.domain.piece.CampType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
 
 @DisplayName("게임 DAO")
@@ -45,5 +48,19 @@ class GameDaoTest {
 
         // when & then
         assertThatCode(() -> gameDao.updateWinnerCampById(gameId, winner)).doesNotThrowAnyException();
+    }
+
+    @DisplayName("게임 DAO는 게임의 상태를 반환한다.")
+    @Test
+    void findStateById() {
+        // given
+        int gameId = 1;
+        gameDao.updateStateById(gameId, StateName.BLACK_TURN);
+
+        // when
+        BoardState actual = gameDao.findStateById(gameId);
+
+        // then
+        assertThat(actual).isInstanceOf(BlackTurnStateTest.class);
     }
 }
