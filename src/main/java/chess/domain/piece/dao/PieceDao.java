@@ -5,23 +5,28 @@ import chess.domain.piece.CampType;
 import chess.domain.piece.Piece;
 import chess.domain.piece.PieceType;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.Optional;
 
 public class PieceDao {
 
-    public void createPiece(Piece piece) {
+    public int createPiece(Piece piece) {
         Connection connection = DBConnection.getConnection();
 
         try {
-            PreparedStatement statement = connection.prepareStatement("INSERT INTO piece (type, camp) VALUES (?, ?)");
+            PreparedStatement statement = connection.prepareStatement("INSERT INTO piece (type, camp) VALUES (?, ?)",
+                    Statement.RETURN_GENERATED_KEYS);
             statement.setString(1, piece.getPieceType().name());
             statement.setString(2, piece.getCampType().name());
 
             statement.executeUpdate();
+            ResultSet resultSet = statement.getGeneratedKeys();
+
+            if (resultSet.next()) {
+                return resultSet.getInt(1);
+            }
+
+            throw new SQLException();
         } catch (SQLException e) {
             throw new RuntimeException("DB에 Piece를 저장하는 중 오류가 발생했습니다.");
         }

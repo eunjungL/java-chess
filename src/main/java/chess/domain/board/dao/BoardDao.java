@@ -26,7 +26,7 @@ public class BoardDao {
 
         try {
             int pieceId = pieceDao.findPieceIdByPiece(piece)
-                    .orElseGet(() -> createNewPiece(piece));
+                    .orElseGet(() -> pieceDao.createPiece(piece));
 
             PreparedStatement statement = connection.prepareStatement("INSERT INTO board (game_id, square, piece_id) VALUES (?, ?, ?)");
             statement.setString(1, String.valueOf(gameId));
@@ -35,16 +35,8 @@ public class BoardDao {
 
             statement.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
             throw new RuntimeException("Board 테이블에 정보를 저장하던 중 오류가 발생했습니다.");
         }
-    }
-
-    private int createNewPiece(Piece piece) {
-        pieceDao.createPiece(piece);
-
-        return pieceDao.findPieceIdByPiece(piece)
-                .orElseThrow(() -> new RuntimeException("piece를 새로 생성하고 가져오는 과정에서 오류가 발생했습니다."));
     }
 
     public Optional<Map<Square, Piece>> findBoardByGameId(int gameId) {
