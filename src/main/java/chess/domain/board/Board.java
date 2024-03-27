@@ -1,5 +1,6 @@
 package chess.domain.board;
 
+import chess.domain.board.dao.BoardDao;
 import chess.domain.board.dto.BoardOutput;
 import chess.domain.board.dto.GameResult;
 import chess.domain.board.state.BoardState;
@@ -20,13 +21,16 @@ public class Board {
     private static final String NOT_YOUR_TURN_ERROR = "움직이려고 하는 말이 본인 진영의 말이 아닙니다.";
     private static final String CANNOT_MOVE_ERROR = "해당 경로로는 말을 이동할 수 없습니다.";
 
+    // TODO: boardId 1 하드 코딩 된 부분 처리
+    private final int boardId = 1;
+    private final BoardDao boardDao;
     private final Map<Square, Piece> board;
     private BoardState boardState;
 
     public Board() {
-        // TODO: boardId 1 하드 코딩 된 부분 처리
-        this.board = new BoardFactory().create(1);
+        this.board = new BoardFactory().create(boardId);
         this.boardState = new WhiteTurnState();
+        this.boardDao = new BoardDao();
     }
 
     public BoardOutput toBoardOutput() {
@@ -39,7 +43,7 @@ public class Board {
 
     public void move(Square source, Square destination) {
         checkMovable(source, destination);
-        moveOrCatch(source, destination);
+        moveOrAttack(source, destination);
     }
 
     private void checkMovable(Square source, Square destination) {
@@ -62,19 +66,32 @@ public class Board {
         }
     }
 
-    private void moveOrCatch(Square source, Square destination) {
+    private void moveOrAttack(Square source, Square destination) {
         Piece sourcePiece = board.get(source);
         Piece destinationPiece = board.get(destination);
 
         if (destinationPiece.isNotEmpty()) {
-            board.replace(source, new Piece(PieceType.EMPTY, CampType.EMPTY));
-            board.replace(destination, sourcePiece);
-            boardState = checkGameOver(destinationPiece);
+            attack(source, destination, sourcePiece, destinationPiece);
             return;
         }
 
+        move(source, destination, destinationPiece, sourcePiece);
+    }
+
+    private void attack(Square source, Square destination, Piece sourcePiece, Piece destinationPiece) {
+        board.replace(source, new Piece(PieceType.EMPTY, CampType.EMPTY));
+        board.replace(destination, sourcePiece);
+        boardDao.updateBoardBySquare(boardId, source, new Piece(PieceType.EMPTY, CampType.EMPTY));
+        boardDao.updateBoardBySquare(boardId, destination, sourcePiece);
+        boardState = checkGameOver(destinationPiece);
+    }
+
+
+    private void move(Square source, Square destination, Piece destinationPiece, Piece sourcePiece) {
         board.replace(source, destinationPiece);
         board.replace(destination, sourcePiece);
+        boardDao.updateBoardBySquare(boardId, source, destinationPiece);
+        boardDao.updateBoardBySquare(boardId, destination, sourcePiece);
         boardState = boardState.nextTurnState();
     }
 

@@ -73,4 +73,22 @@ public class BoardDao {
             throw new RuntimeException(e);
         }
     }
+
+    public void updateBoardBySquare(int boardId, Square square, Piece piece) {
+        Connection connection = DBConnection.getConnection();
+
+        int pieceId = pieceDao.findPieceIdByPiece(piece)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 체스말입니다."));
+
+        try {
+            PreparedStatement statement = connection.prepareStatement("UPDATE board SET piece_id = ? WHERE id = ? AND square = ?");
+            statement.setString(1, String.valueOf(pieceId));
+            statement.setString(2, String.valueOf(boardId));
+            statement.setString(3, square.getKey());
+
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

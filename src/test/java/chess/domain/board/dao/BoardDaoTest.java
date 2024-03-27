@@ -1,5 +1,6 @@
 package chess.domain.board.dao;
 
+import chess.domain.board.Board;
 import chess.domain.piece.CampType;
 import chess.domain.piece.Piece;
 import chess.domain.piece.PieceType;
@@ -15,15 +16,18 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 @DisplayName("보드 DAO")
 class BoardDaoTest {
 
     private BoardDao boardDao;
+    private Board board;
 
     @BeforeEach
     void setUp() {
         boardDao = new BoardDao();
+        board = new Board();
     }
 
     @DisplayName("보드 DAO는 위치에 맞게 체스말을 저장한다.")
@@ -48,5 +52,24 @@ class BoardDaoTest {
 
         // then
         assertThat(board.get().size()).isEqualTo(64);
+    }
+
+    @DisplayName("보드 DAO는 주어진 정보에 따라 테이블을 업데이트한다.")
+    @Test
+    void updateBoardBySquare() {
+        // given
+        int boardId = 1;
+
+        Square source = Square.of(File.A, Rank.SEVEN);
+        Square destination = Square.of(File.A, Rank.FIVE);
+
+        Piece sourcePiece = board.findPieceBySquare(source);
+        Piece destinationPiece = board.findPieceBySquare(destination);
+
+        // when & then
+        assertAll(
+                () -> boardDao.updateBoardBySquare(boardId, source, destinationPiece),
+                () -> boardDao.updateBoardBySquare(boardId, destination, sourcePiece)
+        );
     }
 }
