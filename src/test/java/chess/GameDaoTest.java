@@ -1,6 +1,7 @@
 package chess;
 
 import chess.domain.board.state.StateName;
+import chess.domain.piece.CampType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -33,5 +34,16 @@ class GameDaoTest {
 
         // when & then
         assertThatCode(() -> gameDao.updateStateById(gameId, stateName)).doesNotThrowAnyException();
+    }
+
+    @DisplayName("게임 DAO는 우승자를 기록한다.")
+    @Test
+    void updateWinnerCampById() {
+        // given
+        int gameId = 1;
+        CampType winner = CampType.WHITE;
+
+        // when & then
+        assertThatCode(() -> gameDao.updateWinnerCampById(gameId, winner)).doesNotThrowAnyException();
     }
 }

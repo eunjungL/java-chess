@@ -102,7 +102,10 @@ public class Board {
 
     private BoardState checkGameOver(Piece destinationPiece) {
         if (destinationPiece.isKing()) {
-            return boardState.makeGameOver();
+            BoardState gameOverState = boardState.makeGameOver();
+            gameDao.updateWinnerCampById(gameId, gameOverState.findWinner());
+
+            return gameOverState;
         }
 
         return boardState.nextTurnState();

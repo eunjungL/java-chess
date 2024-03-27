@@ -1,6 +1,7 @@
 package chess;
 
 import chess.domain.board.state.StateName;
+import chess.domain.piece.CampType;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -34,5 +35,19 @@ public class GameDao {
             throw new RuntimeException(e);
         }
 
+    }
+
+    public void updateWinnerCampById(int gameId, CampType campType) {
+        Connection connection = DBConnection.getConnection();
+
+        try {
+            PreparedStatement statement = connection.prepareStatement("UPDATE game SET winner_camp = ? WHERE id = ?");
+            statement.setString(1, campType.name());
+            statement.setString(2, String.valueOf(gameId));
+
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
