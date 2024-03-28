@@ -24,7 +24,7 @@ public class BoardFactory {
     }
 
     public Map<Square, Piece> create(int gameId) {
-        Optional<Map<Square, Piece>> board = new BoardDao().findByGameId(gameId);
+        Optional<Map<Square, Piece>> board = boardDao.findByGameId(gameId);
 
         return board.orElseGet(() -> makeNewBoard(gameId));
     }

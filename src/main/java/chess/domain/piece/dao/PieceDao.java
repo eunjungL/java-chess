@@ -10,6 +10,10 @@ import java.util.Optional;
 
 public class PieceDao {
 
+    private static final String SAVE_EXCEPTION = "Piece 테이블에 정보를 저장하던 중 오류가 발생했습니다.";
+    private static final String READ_EXCEPTION = "Piece 테이블에서 정보를 가져오던 중 오류가 발생했습니다.";
+    private static final String PIECE_NOT_FOUND = "존재하지 않는 piece ID입니다.";
+
     private final Connection connection;
 
     public PieceDao() {
@@ -32,7 +36,7 @@ public class PieceDao {
 
             throw new RuntimeException();
         } catch (SQLException | RuntimeException e) {
-            throw new RuntimeException("Piece 테이블에 정보를 저장하던 중 오류가 발생했습니다.");
+            throw new RuntimeException(SAVE_EXCEPTION);
         }
     }
 
@@ -49,7 +53,7 @@ public class PieceDao {
 
             return Optional.empty();
         } catch (SQLException e) {
-            throw new RuntimeException("Piece 테이블에서 정보를 가져오던 중 오류가 발생했습니다.");
+            throw new RuntimeException(READ_EXCEPTION);
         }
     }
 
@@ -66,9 +70,9 @@ public class PieceDao {
                 return new Piece(pieceType, campType);
             }
 
-            throw new IllegalArgumentException("존재하지 않는 piece ID입니다.");
+            throw new IllegalArgumentException(PIECE_NOT_FOUND);
         } catch (SQLException e) {
-            throw new RuntimeException("Piece 테이블에서 정보를 가져오던 중 오류가 발생했습니다.");
+            throw new RuntimeException(READ_EXCEPTION);
         }
     }
 }

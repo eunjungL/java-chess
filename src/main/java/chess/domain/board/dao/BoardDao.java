@@ -5,15 +5,18 @@ import chess.domain.piece.Piece;
 import chess.domain.piece.dao.PieceDao;
 import chess.domain.square.Square;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
 public class BoardDao {
+
+    private static final String SAVE_EXCEPTION = "Board 테이블에 정보를 저장하던 중 오류가 발생했습니다.";
+    private static final String READ_EXCEPTION = "Board 테이블의 정보를 불러오던 중 오류가 발생했습니다.";
+    private static final String UPDATE_EXCEPTION = "Board 테이블을 업데이트하던 중 오류가 발생했습니다.";
+    private static final String PIECE_NOT_FOUND = "존재하지 않는 체스말입니다.";
+    private static final String GAME_NOT_FOUND = "존재하지 않는 게임입니다.";
 
     private final Connection connection;
     private final PieceDao pieceDao;
@@ -35,8 +38,10 @@ public class BoardDao {
             statement.setInt(3, pieceId);
 
             statement.executeUpdate();
+        } catch (SQLIntegrityConstraintViolationException e) {
+            throw new IllegalArgumentException(GAME_NOT_FOUND);
         } catch (SQLException e) {
-            throw new RuntimeException("Board 테이블에 정보를 저장하던 중 오류가 발생했습니다.");
+            throw new RuntimeException(SAVE_EXCEPTION);
         }
     }
 
@@ -61,13 +66,13 @@ public class BoardDao {
 
             return Optional.of(board);
         } catch (SQLException e) {
-            throw new RuntimeException("Board 테이블의 정보를 불러오던 중 오류가 발생했습니다.");
+            throw new RuntimeException(READ_EXCEPTION);
         }
     }
 
     public void update(int gameId, Square square, Piece piece) {
         int pieceId = pieceDao.findIdByPiece(piece)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 체스말입니다."));
+                .orElseThrow(() -> new IllegalArgumentException(PIECE_NOT_FOUND));
 
         try {
             PreparedStatement statement = connection
@@ -78,7 +83,7 @@ public class BoardDao {
 
             statement.executeUpdate();
         } catch (SQLException e) {
-            throw new RuntimeException("Board 테이블을 업데이트하던 중 오류가 발생했습니다.");
+            throw new RuntimeException(UPDATE_EXCEPTION);
         }
     }
 }

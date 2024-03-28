@@ -9,6 +9,12 @@ import java.util.List;
 
 public class GameDao {
 
+    private static final String SAVE_EXCEPTION = "Game 테이블에 정보를 저장하던 중 오류가 발생했습니다.";
+    private static final String GAME_NOT_FOUND = "존재하지 않는 게임입니다.";
+    private static final String UPDATE_EXCEPTION = "Game 테이블을 업데이트하던 중 오류가 발생했습니다.";
+    private static final String STATE_NOT_FOUND = "존재하지 않는 상태입니다.";
+    private static final String READ_EXCEPTION = "Game 테이블에서 정보를 읽어오던 중 발생했습니다.";
+
     private final Connection connection;
 
     public GameDao() {
@@ -30,7 +36,7 @@ public class GameDao {
 
             throw new RuntimeException();
         } catch (SQLException | RuntimeException e) {
-            throw new RuntimeException("Game 테이블에 정보를 저장하던 중 오류가 발생했습니다.");
+            throw new RuntimeException(SAVE_EXCEPTION);
         }
     }
 
@@ -46,9 +52,9 @@ public class GameDao {
                 return makeBoardState(stateName, resultSet);
             }
 
-            throw new IllegalArgumentException("존재하지 않는 게임입니다.");
+            throw new IllegalArgumentException(GAME_NOT_FOUND);
         } catch (SQLException e) {
-            throw new RuntimeException("Game 테이블을 업데이트하던 중 오류가 발생했습니다.");
+            throw new RuntimeException(READ_EXCEPTION);
         }
     }
 
@@ -66,7 +72,7 @@ public class GameDao {
             return new GameOverState(CampType.findByName(winnerCampName));
         }
 
-        throw new IllegalArgumentException("존재하지 않는 상태입니다.");
+        throw new IllegalArgumentException(STATE_NOT_FOUND);
     }
 
     public List<String> findAllId() {
@@ -82,7 +88,7 @@ public class GameDao {
 
             return gameIds;
         } catch (SQLException e) {
-            throw new RuntimeException("Game 테이블에서 정보를 읽어오던 중 발생했습니다.");
+            throw new RuntimeException(READ_EXCEPTION);
         }
     }
 
@@ -94,7 +100,7 @@ public class GameDao {
 
             statement.executeUpdate();
         } catch (SQLException e) {
-            throw new RuntimeException("Game 테이블을 업데이트하던 중 오류가 발생했습니다.");
+            throw new RuntimeException(UPDATE_EXCEPTION);
         }
 
     }
@@ -107,7 +113,7 @@ public class GameDao {
 
             statement.executeUpdate();
         } catch (SQLException e) {
-            throw new RuntimeException("Game 테이블을 업데이트하던 중 오류가 발생했습니다.");
+            throw new RuntimeException(UPDATE_EXCEPTION);
         }
     }
 }

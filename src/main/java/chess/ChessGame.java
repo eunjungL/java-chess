@@ -35,7 +35,7 @@ public class ChessGame {
             return;
         }
 
-        Board board = createBoardByGameCommand(readGameCommand());
+        Board board = RetryUtil.retryUntilNoException(() -> createBoardByGameCommand(readGameCommand()));
         printBoardOutput(board);
 
         playUntilEnd(board);
@@ -43,7 +43,7 @@ public class ChessGame {
 
     private Command readGameCommand() {
         List<String> gameIds = new GameDao().findAllId();
-        return RetryUtil.retryUntilNoException(() -> inputView.readGameCommand(gameIds));
+        return inputView.readGameCommand(gameIds);
     }
 
     private Board createBoardByGameCommand(Command gameCommand) {
