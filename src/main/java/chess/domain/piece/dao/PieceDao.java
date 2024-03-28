@@ -10,12 +10,16 @@ import java.util.Optional;
 
 public class PieceDao {
 
-    public int createPiece(Piece piece) {
-        Connection connection = DBConnection.getConnection();
+    private final Connection connection;
 
+    public PieceDao() {
+        this.connection = DBConnection.getConnection();
+    }
+
+    public int save(Piece piece) {
         try {
-            PreparedStatement statement = connection.prepareStatement("INSERT INTO piece (type, camp) VALUES (?, ?)",
-                    Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement statement = connection
+                    .prepareStatement("INSERT INTO piece (type, camp) VALUES (?, ?)", Statement.RETURN_GENERATED_KEYS);
             statement.setString(1, piece.getPieceType().name());
             statement.setString(2, piece.getCampType().name());
 
@@ -26,50 +30,45 @@ public class PieceDao {
                 return resultSet.getInt(1);
             }
 
-            throw new SQLException();
-        } catch (SQLException e) {
-            throw new RuntimeException("DB에 Piece를 저장하는 중 오류가 발생했습니다.");
+            throw new RuntimeException();
+        } catch (SQLException | RuntimeException e) {
+            throw new RuntimeException("Piece 테이블에 정보를 저장하던 중 오류가 발생했습니다.");
         }
     }
 
-    public Optional<Integer> findPieceIdByPiece(Piece piece) {
-        Connection connection = DBConnection.getConnection();
-
+    public Optional<Integer> findIdByPiece(Piece piece) {
         try {
-            PreparedStatement statement = connection.prepareStatement("SELECT * FROM piece WHERE type = ? AND camp =?");
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM piece WHERE type = ? AND camp = ?");
             statement.setString(1, piece.getPieceType().name());
             statement.setString(2, piece.getCampType().name());
 
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
-                return Optional.of(Integer.valueOf(resultSet.getString("id")));
+                return Optional.of(resultSet.getInt("id"));
             }
 
             return Optional.empty();
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Piece 테이블에서 정보를 가져오던 중 오류가 발생했습니다.");
         }
     }
 
-    public Piece findPieceById(String id) {
-        Connection connection = DBConnection.getConnection();
-
+    public Piece findById(int id) {
         try {
             PreparedStatement statement = connection.prepareStatement("SELECT * FROM piece WHERE id = ?");
-            statement.setString(1, id);
+            statement.setInt(1, id);
 
             ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                PieceType pieceType = PieceType.findByName(resultSet.getString("type"));
+                CampType campType = CampType.findByName(resultSet.getString("camp"));
 
-            if (!resultSet.next()) {
-                throw new IllegalArgumentException("존재하지 않는 piece ID입니다.");
+                return new Piece(pieceType, campType);
             }
 
-            PieceType pieceType = PieceType.findPieceTypeByName(resultSet.getString("type"));
-            CampType campType = CampType.findCampTypeByName(resultSet.getString("camp"));
-
-            return new Piece(pieceType, campType);
+            throw new IllegalArgumentException("존재하지 않는 piece ID입니다.");
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Piece 테이블에서 정보를 가져오던 중 오류가 발생했습니다.");
         }
     }
 }

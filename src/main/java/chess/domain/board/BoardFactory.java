@@ -24,7 +24,7 @@ public class BoardFactory {
     }
 
     public Map<Square, Piece> create(int gameId) {
-        Optional<Map<Square, Piece>> board = new BoardDao().findBoardByGameId(gameId);
+        Optional<Map<Square, Piece>> board = new BoardDao().findByGameId(gameId);
 
         return board.orElseGet(() -> makeNewBoard(gameId));
     }
@@ -45,7 +45,7 @@ public class BoardFactory {
                 Square square = Square.of(file, rank);
                 Piece piece = new Piece(PieceType.EMPTY, CampType.EMPTY);
                 expected.put(square, piece);
-                boardDao.savePieceBySquare(gameId, square, piece);
+                boardDao.save(gameId, square, piece);
             }
         }
     }
@@ -60,12 +60,12 @@ public class BoardFactory {
             Square square = Square.of(file, Rank.EIGHT);
             Piece piece = new Piece(pieceTypeIterator.next(), CampType.BLACK);
             expected.put(square, piece);
-            boardDao.savePieceBySquare(gameId, square, piece);
+            boardDao.save(gameId, square, piece);
 
             square = Square.of(file, Rank.SEVEN);
             piece = new Piece(PieceType.PAWN, CampType.BLACK);
             expected.put(square, piece);
-            boardDao.savePieceBySquare(gameId, square, piece);
+            boardDao.save(gameId, square, piece);
         }
     }
 
@@ -79,12 +79,12 @@ public class BoardFactory {
             Square square = Square.of(file, Rank.ONE);
             Piece piece = new Piece(pieceTypeIterator.next(), CampType.WHITE);
             expected.put(square, piece);
-            boardDao.savePieceBySquare(gameId, square, piece);
+            boardDao.save(gameId, square, piece);
 
             square = Square.of(file, Rank.TWO);
             piece = new Piece(PieceType.PAWN, CampType.WHITE);
             expected.put(square, piece);
-            boardDao.savePieceBySquare(gameId, square, piece);
+            boardDao.save(gameId, square, piece);
         }
     }
 }

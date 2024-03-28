@@ -25,7 +25,7 @@ class GameDaoTest {
     @Test
     void createGame() {
         // when & then
-        assertThatCode(() -> gameDao.createGame()).doesNotThrowAnyException();
+        assertThatCode(() -> gameDao.save()).doesNotThrowAnyException();
     }
 
     @DisplayName("게임 DAO는 게임의 상태를 변경한다.")
@@ -36,7 +36,7 @@ class GameDaoTest {
         StateName stateName = StateName.BLACK_TURN;
 
         // when & then
-        assertThatCode(() -> gameDao.updateStateById(gameId, stateName)).doesNotThrowAnyException();
+        assertThatCode(() -> gameDao.update(gameId, stateName)).doesNotThrowAnyException();
     }
 
     @DisplayName("게임 DAO는 우승자를 기록한다.")
@@ -47,7 +47,7 @@ class GameDaoTest {
         CampType winner = CampType.WHITE;
 
         // when & then
-        assertThatCode(() -> gameDao.updateWinnerCampById(gameId, winner)).doesNotThrowAnyException();
+        assertThatCode(() -> gameDao.update(gameId, winner)).doesNotThrowAnyException();
     }
 
     @DisplayName("게임 DAO는 게임의 상태를 반환한다.")
@@ -55,7 +55,7 @@ class GameDaoTest {
     void findStateById() {
         // given
         int gameId = 1;
-        gameDao.updateStateById(gameId, StateName.BLACK_TURN);
+        gameDao.update(gameId, StateName.BLACK_TURN);
 
         // when
         BoardState actual = gameDao.findStateById(gameId);

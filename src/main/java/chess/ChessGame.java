@@ -42,7 +42,7 @@ public class ChessGame {
     }
 
     private Command readGameCommand() {
-        List<String> gameIds = new GameDao().findAllIds();
+        List<String> gameIds = new GameDao().findAllId();
         return RetryUtil.retryUntilNoException(() -> inputView.readGameCommand(gameIds));
     }
 

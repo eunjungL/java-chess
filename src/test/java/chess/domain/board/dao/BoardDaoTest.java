@@ -38,7 +38,7 @@ class BoardDaoTest {
         Piece piece = new Piece(PieceType.PAWN, CampType.BLACK);
 
         // when & then
-        assertThatCode(() -> boardDao.savePieceBySquare(1, square, piece)).doesNotThrowAnyException();
+        assertThatCode(() -> boardDao.save(1, square, piece)).doesNotThrowAnyException();
     }
 
     @DisplayName("보드 DAO는 id에 맞는 체스판을 제공한다.")
@@ -48,7 +48,7 @@ class BoardDaoTest {
         int id = 1;
 
         // when
-        Optional<Map<Square, Piece>> board = boardDao.findBoardByGameId(id);
+        Optional<Map<Square, Piece>> board = boardDao.findByGameId(id);
 
         // then
         assertThat(board.get().size()).isEqualTo(64);
@@ -68,8 +68,8 @@ class BoardDaoTest {
 
         // when & then
         assertAll(
-                () -> boardDao.updateBoardBySquare(gameId, source, destinationPiece),
-                () -> boardDao.updateBoardBySquare(gameId, destination, sourcePiece)
+                () -> boardDao.update(gameId, source, destinationPiece),
+                () -> boardDao.update(gameId, destination, sourcePiece)
         );
     }
 }

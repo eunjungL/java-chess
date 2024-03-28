@@ -28,7 +28,7 @@ class PieceDaoTest {
         // given
         Piece piece = new Piece(PieceType.PAWN, CampType.WHITE);
 
-        assertThatCode(() -> pieceDao.createPiece(piece)).doesNotThrowAnyException();
+        assertThatCode(() -> pieceDao.save(piece)).doesNotThrowAnyException();
     }
 
     @DisplayName("체스말 DAO는 타입과 진영을 통해 체스말의 id를 가져온다.")
@@ -38,7 +38,7 @@ class PieceDaoTest {
         Piece piece = new Piece(PieceType.ROOK, CampType.BLACK);
 
         // when
-        Optional<Integer> pieceId = pieceDao.findPieceIdByPiece(piece);
+        Optional<Integer> pieceId = pieceDao.findIdByPiece(piece);
 
         // then
         assertThat(pieceId).isEqualTo(Optional.of(1));

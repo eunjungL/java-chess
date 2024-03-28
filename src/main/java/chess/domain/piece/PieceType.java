@@ -43,7 +43,7 @@ public enum PieceType {
         return score;
     }
 
-    public static PieceType findPieceTypeByName(String name) {
+    public static PieceType findByName(String name) {
         return Arrays.stream(PieceType.values())
                 .filter(pieceType -> pieceType.name().equals(name))
                 .findFirst()

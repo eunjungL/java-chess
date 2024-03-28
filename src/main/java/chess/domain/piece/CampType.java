@@ -9,7 +9,7 @@ public enum CampType {
     EMPTY,
     ;
 
-    public static CampType findCampTypeByName(String name) {
+    public static CampType findByName(String name) {
         return Arrays.stream(CampType.values())
                 .filter(campType ->  campType.name().equals(name))
                 .findFirst()

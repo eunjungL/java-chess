@@ -31,7 +31,7 @@ public class Board {
         this.boardDao = new BoardDao();
         this.gameDao = new GameDao();
 
-        this.gameId = gameDao.createGame();
+        this.gameId = gameDao.save();
         this.board = new BoardFactory().create(gameId);
         this.boardState = gameDao.findStateById(gameId);
     }
@@ -93,26 +93,26 @@ public class Board {
     private void attack(Square source, Square destination, Piece sourcePiece, Piece destinationPiece) {
         board.replace(source, new Piece(PieceType.EMPTY, CampType.EMPTY));
         board.replace(destination, sourcePiece);
-        boardDao.updateBoardBySquare(gameId, source, new Piece(PieceType.EMPTY, CampType.EMPTY));
-        boardDao.updateBoardBySquare(gameId, destination, sourcePiece);
+        boardDao.update(gameId, source, new Piece(PieceType.EMPTY, CampType.EMPTY));
+        boardDao.update(gameId, destination, sourcePiece);
         boardState = checkGameOver(destinationPiece);
-        gameDao.updateStateById(gameId, boardState.getSateName());
+        gameDao.update(gameId, boardState.getSateName());
     }
 
 
     private void move(Square source, Square destination, Piece destinationPiece, Piece sourcePiece) {
         board.replace(source, destinationPiece);
         board.replace(destination, sourcePiece);
-        boardDao.updateBoardBySquare(gameId, source, destinationPiece);
-        boardDao.updateBoardBySquare(gameId, destination, sourcePiece);
+        boardDao.update(gameId, source, destinationPiece);
+        boardDao.update(gameId, destination, sourcePiece);
         boardState = boardState.nextTurnState();
-        gameDao.updateStateById(gameId, boardState.getSateName());
+        gameDao.update(gameId, boardState.getSateName());
     }
 
     private BoardState checkGameOver(Piece destinationPiece) {
         if (destinationPiece.isKing()) {
             BoardState gameOverState = boardState.makeGameOver();
-            gameDao.updateWinnerCampById(gameId, gameOverState.findWinner());
+            gameDao.update(gameId, gameOverState.findWinner());
 
             return gameOverState;
         }
