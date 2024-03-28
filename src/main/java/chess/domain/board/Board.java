@@ -32,8 +32,7 @@ public class Board {
         this.gameDao = new GameDao();
 
         this.gameId = gameDao.save();
-        this.board = new BoardFactory().create(gameId);
-        this.boardState = gameDao.findStateById(gameId);
+        this.board = makeBoard(gameId);
     }
 
     public Board(int gameId) {
@@ -41,8 +40,14 @@ public class Board {
         this.gameDao = new GameDao();
 
         this.gameId = gameId;
-        this.board = new BoardFactory().create(gameId);
+        board = makeBoard(gameId);
+    }
+
+    private Map<Square, Piece> makeBoard(int gameId) {
+        final Map<Square, Piece> board = new BoardFactory().create(gameId);
         this.boardState = gameDao.findStateById(gameId);
+
+        return board;
     }
 
     public BoardOutput toBoardOutput() {
