@@ -1,10 +1,9 @@
 package chess.domain.board;
 
-import chess.GameDao;
-import chess.domain.board.dao.BoardDao;
 import chess.domain.board.dto.BoardOutput;
 import chess.domain.board.dto.GameResult;
 import chess.domain.board.state.BoardState;
+import chess.domain.board.state.WhiteTurnState;
 import chess.domain.piece.CampType;
 import chess.domain.piece.Piece;
 import chess.domain.piece.PieceType;
@@ -22,32 +21,19 @@ public class Board {
     private static final String CANNOT_MOVE_ERROR = "해당 경로로는 말을 이동할 수 없습니다.";
 
     private final int gameId;
-    private final BoardDao boardDao;
-    private final GameDao gameDao;
     private final Map<Square, Piece> board;
     private BoardState boardState;
 
-    public Board() {
-        this.boardDao = new BoardDao();
-        this.gameDao = new GameDao();
-
-        this.gameId = gameDao.save();
-        this.board = makeBoard(gameId);
-    }
-
-    public Board(int gameId) {
-        this.boardDao = new BoardDao();
-        this.gameDao = new GameDao();
-
+    public Board(int gameId, Map<Square, Piece> board) {
         this.gameId = gameId;
-        board = makeBoard(gameId);
+        this.board = board;
+        this.boardState = new WhiteTurnState();
     }
 
-    private Map<Square, Piece> makeBoard(int gameId) {
-        final Map<Square, Piece> board = new BoardFactory().create(gameId);
-        this.boardState = gameDao.findStateById(gameId);
-
-        return board;
+    public Board(int gameId, Map<Square, Piece> board, BoardState boardState) {
+        this.gameId = gameId;
+        this.board = board;
+        this.boardState = boardState;
     }
 
     public BoardOutput toBoardOutput() {
@@ -58,9 +44,9 @@ public class Board {
         return board.get(square);
     }
 
-    public void movePiece(Square source, Square destination) {
+    public Piece movePiece(Square source, Square destination) {
         checkMovable(source, destination);
-        move(source, destination);
+        return move(source, destination);
     }
 
     private void checkMovable(Square source, Square destination) {
@@ -83,35 +69,29 @@ public class Board {
         }
     }
 
-    private void move(Square source, Square destination) {
+    private Piece move(Square source, Square destination) {
         Piece sourcePiece = board.get(source);
         Piece destinationPiece = board.get(destination);
 
         if (destinationPiece.isNotEmpty()) {
             updateBoard(source, destination, sourcePiece, new Piece(PieceType.EMPTY, CampType.EMPTY));
             boardState = checkGameOver(destinationPiece);
-            gameDao.update(gameId, boardState.getSateName());
-            return;
+            return new Piece(PieceType.EMPTY, CampType.EMPTY);
         }
 
         updateBoard(source, destination, sourcePiece, destinationPiece);
         boardState = boardState.nextTurnState();
-        gameDao.update(gameId, boardState.getSateName());
+        return destinationPiece;
     }
 
     private void updateBoard(Square source, Square destination, Piece sourcePiece, Piece destinationPiece) {
         board.replace(source, destinationPiece);
         board.replace(destination, sourcePiece);
-        boardDao.update(gameId, source, destinationPiece);
-        boardDao.update(gameId, destination, sourcePiece);
     }
 
     private BoardState checkGameOver(Piece destinationPiece) {
         if (destinationPiece.isKing()) {
-            BoardState gameOverState = boardState.makeGameOver();
-            gameDao.update(gameId, gameOverState.findWinner());
-
-            return gameOverState;
+            return boardState.makeGameOver();
         }
 
         return boardState.nextTurnState();
@@ -163,5 +143,13 @@ public class Board {
                 .filter(filterByColor)
                 .filter(Piece::isPawn)
                 .count();
+    }
+
+    public int getGameId() {
+        return gameId;
+    }
+
+    public BoardState getBoardState() {
+        return boardState;
     }
 }

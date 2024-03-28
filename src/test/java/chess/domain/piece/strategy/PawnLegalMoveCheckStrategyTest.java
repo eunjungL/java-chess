@@ -1,6 +1,8 @@
 package chess.domain.piece.strategy;
 
+import chess.GameDao;
 import chess.domain.board.Board;
+import chess.domain.board.BoardFactory;
 import chess.domain.square.File;
 import chess.domain.square.Rank;
 import chess.domain.square.Square;
@@ -19,7 +21,8 @@ public class PawnLegalMoveCheckStrategyTest {
     @BeforeEach
     void setUp() {
         legalMoveCheckStrategy = new PawnLegalMoveCheckStrategy();
-        board = new Board();
+        int gameId = new GameDao().save();
+        board = new Board(gameId, new BoardFactory().create());
     }
 
     @DisplayName("폰은 올바른 위치가 입력되면 이동 가능을 반환한다.")

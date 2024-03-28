@@ -1,5 +1,6 @@
 package chess.domain.board;
 
+import chess.GameDao;
 import chess.domain.board.dto.BoardOutput;
 import chess.domain.board.dto.GameResult;
 import chess.domain.board.state.GameOverState;
@@ -22,14 +23,8 @@ public class BoardTest {
 
     @BeforeEach
     void setUp() {
-        board = new Board();
-    }
-
-    @DisplayName("체스판을 생성한다.")
-    @Test
-    void createBoard() {
-        // when & then
-        assertThatCode(Board::new).doesNotThrowAnyException();
+        int gameId = new GameDao().save();
+        board = new Board(gameId, new BoardFactory().create());
     }
 
     @DisplayName("체스판은 목적지에 같은 색의 말이 있으면 예외를 반환한다.")

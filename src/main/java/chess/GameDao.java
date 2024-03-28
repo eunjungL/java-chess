@@ -2,6 +2,7 @@ package chess;
 
 import chess.domain.board.state.*;
 import chess.domain.piece.CampType;
+import chess.util.DBConnection;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -114,6 +115,19 @@ public class GameDao {
             statement.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(UPDATE_EXCEPTION);
+        }
+    }
+
+    public boolean existsById(int gameId) {
+        try {
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM game WHERE id = ?");
+            statement.setInt(1, gameId);
+
+            ResultSet resultSet = statement.executeQuery();
+
+            return resultSet.next();
+        } catch (SQLException e) {
+            throw new RuntimeException(READ_EXCEPTION);
         }
     }
 }

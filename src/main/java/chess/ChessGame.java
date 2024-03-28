@@ -2,6 +2,7 @@ package chess;
 
 import chess.domain.board.Board;
 import chess.domain.board.dto.GameResult;
+import chess.domain.board.service.BoardService;
 import chess.domain.piece.Piece;
 import chess.domain.square.File;
 import chess.domain.square.Rank;
@@ -22,10 +23,12 @@ public class ChessGame {
 
     private final InputView inputView;
     private final OutputView outputView;
+    private final BoardService boardService;
 
     public ChessGame() {
         this.inputView = new InputView();
         this.outputView = new OutputView();
+        this.boardService = new BoardService();
     }
 
     public void play() {
@@ -35,7 +38,7 @@ public class ChessGame {
             return;
         }
 
-        Board board = RetryUtil.retryUntilNoException(() -> createBoardByGameCommand(readGameCommand()));
+        Board board = RetryUtil.retryUntilNoException(() -> createBoard(readGameCommand()));
         printBoardOutput(board);
 
         playUntilEnd(board);
@@ -46,13 +49,13 @@ public class ChessGame {
         return inputView.readGameCommand(gameIds);
     }
 
-    private Board createBoardByGameCommand(Command gameCommand) {
+    private Board createBoard(Command gameCommand) {
         if (gameCommand.isEnterCommand()) {
             int gameId = Integer.parseInt(gameCommand.source());
-            return new Board(gameId);
+            return boardService.createBoard(gameId);
         }
 
-        return new Board();
+        return boardService.createBoard();
     }
 
     private void playUntilEnd(Board board) {
@@ -92,7 +95,7 @@ public class ChessGame {
     }
 
     private void movePiece(Board board, MoveCommand moveCommand) {
-        board.movePiece(moveCommand.source(), moveCommand.destination());
+        boardService.move(board, moveCommand);
         printBoardOutput(board);
     }
 

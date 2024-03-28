@@ -1,6 +1,6 @@
 package chess.domain.board.dao;
 
-import chess.DBConnection;
+import chess.util.DBConnection;
 import chess.domain.piece.Piece;
 import chess.domain.piece.dao.PieceDao;
 import chess.domain.square.Square;
@@ -40,6 +40,27 @@ public class BoardDao {
             statement.executeUpdate();
         } catch (SQLIntegrityConstraintViolationException e) {
             throw new IllegalArgumentException(GAME_NOT_FOUND);
+        } catch (SQLException e) {
+            throw new RuntimeException(SAVE_EXCEPTION);
+        }
+    }
+
+    public void saveAll(int gameId, Map<Square, Piece> board) {
+        try {
+            PreparedStatement statement = connection
+                    .prepareStatement("INSERT INTO board (game_id, square, piece_id) VALUES (?, ?, ?)");
+
+            for (Map.Entry<Square, Piece> b : board.entrySet()) {
+                String squareKey = b.getKey().getKey();
+                int pieceId = pieceDao.findIdByPiece(b.getValue())
+                        .orElseGet(() -> pieceDao.save(b.getValue()));
+
+                statement.setInt(1, gameId);
+                statement.setString(2, squareKey);
+                statement.setInt(3, pieceId);
+
+                statement.executeUpdate();
+            }
         } catch (SQLException e) {
             throw new RuntimeException(SAVE_EXCEPTION);
         }

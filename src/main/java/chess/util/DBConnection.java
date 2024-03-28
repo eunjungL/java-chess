@@ -1,4 +1,4 @@
-package chess;
+package chess.util;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

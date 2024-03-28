@@ -25,7 +25,7 @@ public class BoardFactoryTest {
 
         // when
         // TODO: DB 영향 받아서 테스트 깨지는 부분 해결하기
-        Map<Square, Piece> actual = boardFactory.create(1);
+        Map<Square, Piece> actual = boardFactory.create();
 
         // then
         assertThat(actual).usingRecursiveComparison().isEqualTo(expected);

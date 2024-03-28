@@ -1,6 +1,6 @@
 package chess;
 
-import chess.domain.board.state.BlackTurnStateTest;
+import chess.domain.board.state.BlackTurnState;
 import chess.domain.board.state.BoardState;
 import chess.domain.board.state.StateName;
 import chess.domain.piece.CampType;
@@ -61,6 +61,6 @@ class GameDaoTest {
         BoardState actual = gameDao.findStateById(gameId);
 
         // then
-        assertThat(actual).isInstanceOf(BlackTurnStateTest.class);
+        assertThat(actual).isInstanceOf(BlackTurnState.class);
     }
 }

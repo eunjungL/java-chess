@@ -23,36 +23,40 @@ public class BoardFactory {
         boardDao = new BoardDao();
     }
 
+    public Map<Square, Piece> create() {
+        return makeNewBoard();
+    }
+
     public Map<Square, Piece> create(int gameId) {
         Optional<Map<Square, Piece>> board = boardDao.findByGameId(gameId);
 
-        return board.orElseGet(() -> makeNewBoard(gameId));
+        return board.orElseGet(this::makeNewBoard);
     }
 
-    private Map<Square, Piece> makeNewBoard(int gameId) {
+    private Map<Square, Piece> makeNewBoard() {
         Map<Square, Piece> board = new HashMap<>();
 
-        makeBlackPiece(gameId, board);
-        makeWhitePiece(gameId, board);
-        makeEmptyPiece(gameId, board);
+        makeBlackPiece(board);
+        makeWhitePiece(board);
+        makeEmptyPiece(board);
 
         return board;
     }
 
-    private void makeEmptyPiece(int gameId, Map<Square, Piece> expected) {
+    private void makeEmptyPiece(Map<Square, Piece> expected) {
         for (Rank rank : Arrays.copyOfRange(Rank.values(), EMPTY_PIECE_FROM, EMPTY_PIECE_TO)) {
-            makeEmptyPieceByFile(gameId, expected, rank);
+            makeEmptyPieceByFile(expected, rank);
         }
     }
 
-    private void makeEmptyPieceByFile(int gameId, Map<Square, Piece> expected, Rank rank) {
+    private void makeEmptyPieceByFile(Map<Square, Piece> expected, Rank rank) {
         for (File file : File.values()) {
             Piece piece = new Piece(PieceType.EMPTY, CampType.EMPTY);
-            savePiece(gameId, expected, Square.of(file, rank), piece);
+            savePiece(expected, Square.of(file, rank), piece);
         }
     }
 
-    private void makeBlackPiece(int gameId, Map<Square, Piece> expected) {
+    private void makeBlackPiece(Map<Square, Piece> expected) {
         Iterator<File> fileIterator = Arrays.stream(File.values()).iterator();
         Iterator<PieceType> pieceTypeIterator = PIECE_TYPE_ORDER.iterator();
 
@@ -60,14 +64,14 @@ public class BoardFactory {
             File file = fileIterator.next();
 
             Piece normalPiece = new Piece(pieceTypeIterator.next(), CampType.BLACK);
-            savePiece(gameId, expected, Square.of(file, Rank.EIGHT), normalPiece);
+            savePiece(expected, Square.of(file, Rank.EIGHT), normalPiece);
 
             Piece pawnPiece = new Piece(PieceType.PAWN, CampType.BLACK);
-            savePiece(gameId, expected, Square.of(file, Rank.SEVEN), pawnPiece);
+            savePiece(expected, Square.of(file, Rank.SEVEN), pawnPiece);
         }
     }
 
-    private void makeWhitePiece(int gameId, Map<Square, Piece> expected) {
+    private void makeWhitePiece(Map<Square, Piece> expected) {
         Iterator<File> fileIterator = Arrays.stream(File.values()).iterator();
         Iterator<PieceType> pieceTypeIterator = PIECE_TYPE_ORDER.iterator();
 
@@ -75,15 +79,14 @@ public class BoardFactory {
             File file = fileIterator.next();
 
             Piece normalPiece = new Piece(pieceTypeIterator.next(), CampType.WHITE);
-            savePiece(gameId, expected, Square.of(file, Rank.ONE), normalPiece);
+            savePiece(expected, Square.of(file, Rank.ONE), normalPiece);
 
             Piece pawnPiece = new Piece(PieceType.PAWN, CampType.WHITE);
-            savePiece(gameId, expected, Square.of(file, Rank.TWO), pawnPiece);
+            savePiece(expected, Square.of(file, Rank.TWO), pawnPiece);
         }
     }
 
-    private void savePiece(int gameId, Map<Square, Piece> expected, Square square, Piece piece) {
+    private void savePiece(Map<Square, Piece> expected, Square square, Piece piece) {
         expected.put(square, piece);
-        boardDao.save(gameId, square, piece);
     }
 }

@@ -1,6 +1,8 @@
 package chess.domain.piece.strategy;
 
+import chess.GameDao;
 import chess.domain.board.Board;
+import chess.domain.board.BoardFactory;
 import chess.domain.square.File;
 import chess.domain.square.Rank;
 import chess.domain.square.Square;
@@ -19,7 +21,8 @@ class QueenLegalMoveCheckStrategyTest {
     @BeforeEach
     void setUp() {
         legalMoveCheckStrategy = new QueenLegalMoveCheckStrategy();
-        board = new Board();
+        int gameId = new GameDao().save();
+        board = new Board(gameId, new BoardFactory().create());
     }
 
     @DisplayName("퀸은 수평 이동이 들어오면 이동 가능을 반환한다.")

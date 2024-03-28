@@ -1,6 +1,6 @@
 package chess.domain.piece.dao;
 
-import chess.DBConnection;
+import chess.util.DBConnection;
 import chess.domain.piece.CampType;
 import chess.domain.piece.Piece;
 import chess.domain.piece.PieceType;
