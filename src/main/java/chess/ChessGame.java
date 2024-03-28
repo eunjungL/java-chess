@@ -38,10 +38,19 @@ public class ChessGame {
             return;
         }
 
-        Board board = RetryUtil.retryUntilNoException(() -> createBoard(readGameCommand()));
+        int gameId = RetryUtil.retryUntilNoException(() -> makeGame(readGameCommand()));
+        Board board = boardService.createBoard(gameId);
         printBoardOutput(board);
 
-        playUntilEnd(board);
+        playUntilEnd(gameId, board);
+    }
+
+    private int makeGame(Command gameCommand) {
+        if (gameCommand.isCreateCommand()) {
+            return new GameDao().save();
+        }
+
+        return Integer.parseInt(gameCommand.source());
     }
 
     private Command readGameCommand() {
@@ -49,24 +58,15 @@ public class ChessGame {
         return inputView.readGameCommand(gameIds);
     }
 
-    private Board createBoard(Command gameCommand) {
-        if (gameCommand.isEnterCommand()) {
-            int gameId = Integer.parseInt(gameCommand.source());
-            return boardService.createBoard(gameId);
-        }
-
-        return boardService.createBoard();
-    }
-
-    private void playUntilEnd(Board board) {
+    private void playUntilEnd(int gameId, Board board) {
         boolean run = true;
 
         while (run) {
-            run = RetryUtil.retryUntilNoException(() -> loopWhileEnd(board));
+            run = RetryUtil.retryUntilNoException(() -> loopWhileEnd(gameId, board));
         }
     }
 
-    private boolean loopWhileEnd(Board board) {
+    private boolean loopWhileEnd(int gameId, Board board) {
         Command command = inputView.readCommand();
 
         if (command.isEndCommand()) {
@@ -78,7 +78,7 @@ public class ChessGame {
             return true;
         }
 
-        movePiece(board, createMoveCommand(command));
+        movePiece(gameId, board, createMoveCommand(command));
         return true;
     }
 
@@ -94,8 +94,8 @@ public class ChessGame {
         return new MoveCommand(source, destination);
     }
 
-    private void movePiece(Board board, MoveCommand moveCommand) {
-        boardService.move(board, moveCommand);
+    private void movePiece(int gameId, Board board, MoveCommand moveCommand) {
+        boardService.move(gameId, board, moveCommand);
         printBoardOutput(board);
     }
 

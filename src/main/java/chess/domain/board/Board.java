@@ -20,18 +20,15 @@ public class Board {
     private static final String NOT_YOUR_TURN_ERROR = "움직이려고 하는 말이 본인 진영의 말이 아닙니다.";
     private static final String CANNOT_MOVE_ERROR = "해당 경로로는 말을 이동할 수 없습니다.";
 
-    private final int gameId;
     private final Map<Square, Piece> board;
     private BoardState boardState;
 
-    public Board(int gameId, Map<Square, Piece> board) {
-        this.gameId = gameId;
+    public Board(Map<Square, Piece> board) {
         this.board = board;
         this.boardState = new WhiteTurnState();
     }
 
-    public Board(int gameId, Map<Square, Piece> board, BoardState boardState) {
-        this.gameId = gameId;
+    public Board(Map<Square, Piece> board, BoardState boardState) {
         this.board = board;
         this.boardState = boardState;
     }
@@ -143,10 +140,6 @@ public class Board {
                 .filter(filterByColor)
                 .filter(Piece::isPawn)
                 .count();
-    }
-
-    public int getGameId() {
-        return gameId;
     }
 
     public BoardState getBoardState() {

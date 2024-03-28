@@ -1,6 +1,5 @@
 package chess.domain.board;
 
-import chess.GameDao;
 import chess.domain.board.dto.BoardOutput;
 import chess.domain.board.dto.GameResult;
 import chess.domain.board.state.GameOverState;
@@ -23,8 +22,7 @@ public class BoardTest {
 
     @BeforeEach
     void setUp() {
-        int gameId = new GameDao().save();
-        board = new Board(gameId, new BoardFactory().create());
+        board = new Board(new BoardFactory().create());
     }
 
     @DisplayName("체스판은 목적지에 같은 색의 말이 있으면 예외를 반환한다.")

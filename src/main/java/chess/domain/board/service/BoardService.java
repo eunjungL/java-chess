@@ -21,29 +21,26 @@ public class BoardService {
         this.gameDao = new GameDao();
     }
 
-    public Board createBoard() {
-        int gameId = gameDao.save();
-        Map<Square, Piece> board = new BoardFactory().create();
-
-        boardDao.saveAll(gameId, board);
-        return new Board(gameId, board);
-    }
-
     public Board createBoard(int gameId) {
+        Map<Square, Piece> board = boardDao.findByGameId(gameId)
+                .orElseGet(() -> {
+                    Map<Square, Piece> newBoard = new BoardFactory().create();
+                    boardDao.saveAll(gameId, newBoard);
+                    return newBoard;
+                });
         BoardState boardState = gameDao.findStateById(gameId);
-        Map<Square, Piece> board = new BoardFactory().create(gameId);
 
-        return new Board(gameId, board, boardState);
+        return new Board(board, boardState);
     }
 
-    public void move(Board board, MoveCommand moveCommand) {
+    public void move(int gameId, Board board, MoveCommand moveCommand) {
         Square source = moveCommand.source();
         Square destination = moveCommand.destination();
 
         Piece destinationPiece = board.movePiece(source, destination);
-        boardDao.update(board.getGameId(), source, destinationPiece);
-        boardDao.update(board.getGameId(), destination, board.findPieceBySquare(destination));
+        boardDao.update(gameId, source, destinationPiece);
+        boardDao.update(gameId, destination, board.findPieceBySquare(destination));
 
-        gameDao.update(board.getGameId(), board.getBoardState().getSateName());
+        gameDao.update(gameId, board.getBoardState().getSateName());
     }
 }

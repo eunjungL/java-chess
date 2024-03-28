@@ -1,6 +1,5 @@
 package chess.domain.board.dao;
 
-import chess.GameDao;
 import chess.domain.board.Board;
 import chess.domain.board.BoardFactory;
 import chess.domain.piece.CampType;
@@ -29,8 +28,7 @@ class BoardDaoTest {
     @BeforeEach
     void setUp() {
         boardDao = new BoardDao();
-        int gameId = new GameDao().save();
-        board = new Board(gameId, new BoardFactory().create());
+        board = new Board(new BoardFactory().create());
     }
 
     @DisplayName("보드 DAO는 위치에 맞게 체스말을 저장한다.")

@@ -1,6 +1,5 @@
 package chess.domain.piece.strategy;
 
-import chess.GameDao;
 import chess.domain.board.Board;
 import chess.domain.board.BoardFactory;
 import chess.domain.square.File;
@@ -21,8 +20,7 @@ class KnightLegalMoveCheckStrategyTest {
     @BeforeEach
     void setUp() {
         legalMoveCheckStrategy = new KnightLegalMoveCheckStrategy();
-        int gameId = new GameDao().save();
-        board = new Board(gameId, new BoardFactory().create());
+        board = new Board(new BoardFactory().create());
     }
 
     @DisplayName("나이트는 올바른 위치가 들어오면 이동 가능을 반환한다.")
