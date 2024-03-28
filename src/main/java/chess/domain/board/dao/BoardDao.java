@@ -51,23 +51,27 @@ public class BoardDao {
             statement.setInt(1, gameId);
 
             ResultSet resultSet = statement.executeQuery();
-
             if (!resultSet.isBeforeFirst()) {
                 return Optional.empty();
             }
 
-            Map<Square, Piece> board = new HashMap<>();
-            while (resultSet.next()) {
-                Square square = Square.from(resultSet.getString("square"));
-                Piece piece = pieceDao.findById(resultSet.getInt("piece_id"));
-
-                board.put(square, piece);
-            }
-
-            return Optional.of(board);
+            return Optional.of(makeResultBoard(resultSet));
         } catch (SQLException e) {
             throw new RuntimeException(READ_EXCEPTION);
         }
+    }
+
+    private Map<Square, Piece> makeResultBoard(ResultSet resultSet) throws SQLException {
+        Map<Square, Piece> board = new HashMap<>();
+
+        while (resultSet.next()) {
+            Square square = Square.from(resultSet.getString("square"));
+            Piece piece = pieceDao.findById(resultSet.getInt("piece_id"));
+
+            board.put(square, piece);
+        }
+
+        return board;
     }
 
     public void update(int gameId, Square square, Piece piece) {

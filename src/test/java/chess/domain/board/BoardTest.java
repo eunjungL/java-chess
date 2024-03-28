@@ -40,7 +40,7 @@ public class BoardTest {
         Square destination = Square.of(File.A, Rank.SEVEN);
 
         // when & then
-        assertThatThrownBy(() -> board.move(source, destination)).isInstanceOf(IllegalArgumentException.class);
+        assertThatThrownBy(() -> board.movePiece(source, destination)).isInstanceOf(IllegalArgumentException.class);
     }
 
     @DisplayName("체스판은 출발지에서 목적지로 말을 옮긴다.")
@@ -51,7 +51,7 @@ public class BoardTest {
         Square destination = Square.of(File.A, Rank.THREE);
 
         // when & then
-        assertThatCode(() -> board.move(source, destination)).doesNotThrowAnyException();
+        assertThatCode(() -> board.movePiece(source, destination)).doesNotThrowAnyException();
     }
 
     @DisplayName("체스판은 목적지로 가는 경로에 다른 말이 있으면 예외가 발생한다.")
@@ -62,7 +62,7 @@ public class BoardTest {
         Square destination = Square.of(File.A, Rank.FIVE);
 
         // when & then
-        assertThatThrownBy(() -> board.move(source, destination)).isInstanceOf(IllegalArgumentException.class);
+        assertThatThrownBy(() -> board.movePiece(source, destination)).isInstanceOf(IllegalArgumentException.class);
     }
 
     @DisplayName("체스판은 목적지로 가는 경로에 다른 말이 없으면 예외가 발생하지 않는다.")
@@ -73,7 +73,7 @@ public class BoardTest {
         Square destination = Square.of(File.A, Rank.FOUR);
 
         // when & then
-        assertThatCode(() -> board.move(source, destination)).doesNotThrowAnyException();
+        assertThatCode(() -> board.movePiece(source, destination)).doesNotThrowAnyException();
     }
 
     @DisplayName("체스판은 말의 규칙에 따라 갈 수 없는 도착지가 들어오면 예외가 발생한다.")
@@ -84,7 +84,7 @@ public class BoardTest {
         Square destination = Square.of(File.C, Rank.THREE);
 
         // when & then
-        assertThatThrownBy(() -> board.move(source, destination)).isInstanceOf(IllegalArgumentException.class);
+        assertThatThrownBy(() -> board.movePiece(source, destination)).isInstanceOf(IllegalArgumentException.class);
     }
 
     @DisplayName("체스판은 말의 규칙에 따라 갈 수 있는 도착지가 들어오면 예외가 발생하지 않는다.")
@@ -95,7 +95,7 @@ public class BoardTest {
         Square destination = Square.of(File.C, Rank.THREE);
 
         // when & then
-        assertThatCode(() -> board.move(source, destination)).doesNotThrowAnyException();
+        assertThatCode(() -> board.movePiece(source, destination)).doesNotThrowAnyException();
     }
 
     @DisplayName("체스판은 턴에 해당하지 않는 말을 옮기려고 할 때 예외가 발생한다.")
@@ -106,18 +106,18 @@ public class BoardTest {
         Square destination = Square.of(File.C, Rank.SIX);
 
         // when & then
-        assertThatThrownBy(() -> board.move(source, destination)).isInstanceOf(IllegalArgumentException.class);
+        assertThatThrownBy(() -> board.movePiece(source, destination)).isInstanceOf(IllegalArgumentException.class);
     }
 
     @DisplayName("체스판은 말을 이동할 때 도착지에 다른 색의 말이 있으면 말을 잡는다.")
     @Test
     void catchOpponent() {
         // given
-        board.move(Square.of(File.G, Rank.TWO), Square.of(File.G, Rank.FOUR));
-        board.move(Square.of(File.H, Rank.SEVEN), Square.of(File.H, Rank.FIVE));
+        board.movePiece(Square.of(File.G, Rank.TWO), Square.of(File.G, Rank.FOUR));
+        board.movePiece(Square.of(File.H, Rank.SEVEN), Square.of(File.H, Rank.FIVE));
 
         // when
-        board.move(Square.of(File.G, Rank.FOUR), Square.of(File.H, Rank.FIVE));
+        board.movePiece(Square.of(File.G, Rank.FOUR), Square.of(File.H, Rank.FIVE));
 
         BoardOutput boardOutput = board.toBoardOutput();
         Piece actual = boardOutput.board().get(Square.of(File.H, Rank.FIVE));
@@ -132,11 +132,11 @@ public class BoardTest {
     @Test
     void pawnStraightCatch() {
         // given
-        board.move(Square.of(File.G, Rank.TWO), Square.of(File.G, Rank.FOUR));
-        board.move(Square.of(File.G, Rank.SEVEN), Square.of(File.G, Rank.FIVE));
+        board.movePiece(Square.of(File.G, Rank.TWO), Square.of(File.G, Rank.FOUR));
+        board.movePiece(Square.of(File.G, Rank.SEVEN), Square.of(File.G, Rank.FIVE));
 
         // when & then
-        assertThatThrownBy(() -> board.move(Square.of(File.G, Rank.FOUR), Square.of(File.G, Rank.FIVE)))
+        assertThatThrownBy(() -> board.movePiece(Square.of(File.G, Rank.FOUR), Square.of(File.G, Rank.FIVE)))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
@@ -144,14 +144,14 @@ public class BoardTest {
     @Test
     void makeGameOverTurn() {
         // given
-        board.move(Square.of(File.F, Rank.TWO), Square.of(File.F, Rank.THREE));
-        board.move(Square.of(File.E, Rank.SEVEN), Square.of(File.E, Rank.FIVE));
-        board.move(Square.of(File.G, Rank.TWO), Square.of(File.G, Rank.FOUR));
-        board.move(Square.of(File.D, Rank.EIGHT), Square.of(File.H, Rank.FOUR));
-        board.move(Square.of(File.H, Rank.TWO), Square.of(File.H, Rank.THREE));
+        board.movePiece(Square.of(File.F, Rank.TWO), Square.of(File.F, Rank.THREE));
+        board.movePiece(Square.of(File.E, Rank.SEVEN), Square.of(File.E, Rank.FIVE));
+        board.movePiece(Square.of(File.G, Rank.TWO), Square.of(File.G, Rank.FOUR));
+        board.movePiece(Square.of(File.D, Rank.EIGHT), Square.of(File.H, Rank.FOUR));
+        board.movePiece(Square.of(File.H, Rank.TWO), Square.of(File.H, Rank.THREE));
 
         // when
-        board.move(Square.of(File.H, Rank.FOUR), Square.of(File.E, Rank.ONE));
+        board.movePiece(Square.of(File.H, Rank.FOUR), Square.of(File.E, Rank.ONE));
 
         // then
         assertThat(board).extracting("boardState").isInstanceOf(GameOverState.class);
@@ -161,12 +161,12 @@ public class BoardTest {
     @Test
     void calculateScore() {
         // given
-        board.move(Square.of(File.F, Rank.TWO), Square.of(File.F, Rank.THREE));
-        board.move(Square.of(File.E, Rank.SEVEN), Square.of(File.E, Rank.FIVE));
-        board.move(Square.of(File.G, Rank.TWO), Square.of(File.G, Rank.FOUR));
-        board.move(Square.of(File.D, Rank.EIGHT), Square.of(File.H, Rank.FOUR));
-        board.move(Square.of(File.H, Rank.TWO), Square.of(File.H, Rank.THREE));
-        board.move(Square.of(File.H, Rank.FOUR), Square.of(File.E, Rank.ONE));
+        board.movePiece(Square.of(File.F, Rank.TWO), Square.of(File.F, Rank.THREE));
+        board.movePiece(Square.of(File.E, Rank.SEVEN), Square.of(File.E, Rank.FIVE));
+        board.movePiece(Square.of(File.G, Rank.TWO), Square.of(File.G, Rank.FOUR));
+        board.movePiece(Square.of(File.D, Rank.EIGHT), Square.of(File.H, Rank.FOUR));
+        board.movePiece(Square.of(File.H, Rank.TWO), Square.of(File.H, Rank.THREE));
+        board.movePiece(Square.of(File.H, Rank.FOUR), Square.of(File.E, Rank.ONE));
 
         GameResult expected = new GameResult(CampType.BLACK, 38, 38);
 
@@ -181,16 +181,16 @@ public class BoardTest {
     @Test
     void calculateScorePawnScoreCut() {
         // given
-        board.move(Square.of(File.B, Rank.TWO), Square.of(File.B, Rank.FOUR));
-        board.move(Square.of(File.A, Rank.SEVEN), Square.of(File.A, Rank.FIVE));
-        board.move(Square.of(File.B, Rank.FOUR), Square.of(File.A, Rank.FIVE));
-        board.move(Square.of(File.C, Rank.SEVEN), Square.of(File.C, Rank.FIVE));
-        board.move(Square.of(File.F, Rank.TWO), Square.of(File.F, Rank.THREE));
-        board.move(Square.of(File.E, Rank.SEVEN), Square.of(File.E, Rank.FIVE));
-        board.move(Square.of(File.G, Rank.TWO), Square.of(File.G, Rank.FOUR));
-        board.move(Square.of(File.D, Rank.EIGHT), Square.of(File.H, Rank.FOUR));
-        board.move(Square.of(File.H, Rank.TWO), Square.of(File.H, Rank.THREE));
-        board.move(Square.of(File.H, Rank.FOUR), Square.of(File.E, Rank.ONE));
+        board.movePiece(Square.of(File.B, Rank.TWO), Square.of(File.B, Rank.FOUR));
+        board.movePiece(Square.of(File.A, Rank.SEVEN), Square.of(File.A, Rank.FIVE));
+        board.movePiece(Square.of(File.B, Rank.FOUR), Square.of(File.A, Rank.FIVE));
+        board.movePiece(Square.of(File.C, Rank.SEVEN), Square.of(File.C, Rank.FIVE));
+        board.movePiece(Square.of(File.F, Rank.TWO), Square.of(File.F, Rank.THREE));
+        board.movePiece(Square.of(File.E, Rank.SEVEN), Square.of(File.E, Rank.FIVE));
+        board.movePiece(Square.of(File.G, Rank.TWO), Square.of(File.G, Rank.FOUR));
+        board.movePiece(Square.of(File.D, Rank.EIGHT), Square.of(File.H, Rank.FOUR));
+        board.movePiece(Square.of(File.H, Rank.TWO), Square.of(File.H, Rank.THREE));
+        board.movePiece(Square.of(File.H, Rank.FOUR), Square.of(File.E, Rank.ONE));
 
         GameResult expected = new GameResult(CampType.BLACK, 37, 37);
 

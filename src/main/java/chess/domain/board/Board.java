@@ -53,9 +53,9 @@ public class Board {
         return board.get(square);
     }
 
-    public void move(Square source, Square destination) {
+    public void movePiece(Square source, Square destination) {
         checkMovable(source, destination);
-        moveOrAttack(source, destination);
+        move(source, destination);
     }
 
     private void checkMovable(Square source, Square destination) {
@@ -78,35 +78,27 @@ public class Board {
         }
     }
 
-    private void moveOrAttack(Square source, Square destination) {
+    private void move(Square source, Square destination) {
         Piece sourcePiece = board.get(source);
         Piece destinationPiece = board.get(destination);
 
         if (destinationPiece.isNotEmpty()) {
-            attack(source, destination, sourcePiece, destinationPiece);
+            updateBoard(source, destination, sourcePiece, new Piece(PieceType.EMPTY, CampType.EMPTY));
+            boardState = checkGameOver(destinationPiece);
+            gameDao.update(gameId, boardState.getSateName());
             return;
         }
 
-        move(source, destination, destinationPiece, sourcePiece);
-    }
-
-    private void attack(Square source, Square destination, Piece sourcePiece, Piece destinationPiece) {
-        board.replace(source, new Piece(PieceType.EMPTY, CampType.EMPTY));
-        board.replace(destination, sourcePiece);
-        boardDao.update(gameId, source, new Piece(PieceType.EMPTY, CampType.EMPTY));
-        boardDao.update(gameId, destination, sourcePiece);
-        boardState = checkGameOver(destinationPiece);
+        updateBoard(source, destination, sourcePiece, destinationPiece);
+        boardState = boardState.nextTurnState();
         gameDao.update(gameId, boardState.getSateName());
     }
 
-
-    private void move(Square source, Square destination, Piece destinationPiece, Piece sourcePiece) {
+    private void updateBoard(Square source, Square destination, Piece sourcePiece, Piece destinationPiece) {
         board.replace(source, destinationPiece);
         board.replace(destination, sourcePiece);
         boardDao.update(gameId, source, destinationPiece);
         boardDao.update(gameId, destination, sourcePiece);
-        boardState = boardState.nextTurnState();
-        gameDao.update(gameId, boardState.getSateName());
     }
 
     private BoardState checkGameOver(Piece destinationPiece) {

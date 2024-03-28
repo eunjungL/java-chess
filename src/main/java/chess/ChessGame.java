@@ -92,7 +92,7 @@ public class ChessGame {
     }
 
     private void movePiece(Board board, MoveCommand moveCommand) {
-        board.move(moveCommand.source(), moveCommand.destination());
+        board.movePiece(moveCommand.source(), moveCommand.destination());
         printBoardOutput(board);
     }
 
