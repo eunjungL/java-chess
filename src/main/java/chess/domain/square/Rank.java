@@ -47,17 +47,17 @@ public enum Rank {
         return ranks.indexOf(rank) - ranks.indexOf(this);
     }
 
-    public static Rank findRankByValue(int value) {
-        return Arrays.stream(Rank.values())
-                .filter(rank -> rank.value == value)
-                .findAny()
-                .orElseThrow(() -> new IllegalArgumentException(RANK_NOT_FOUND_EXCEPTION));
-    }
-
     public static List<Rank> reverse() {
         List<Rank> reversedRanks = new ArrayList<>(List.of(Rank.values()));
         Collections.reverse(reversedRanks);
 
         return Collections.unmodifiableList(reversedRanks);
+    }
+
+    public static Rank findRankByValue(int value) {
+        return Arrays.stream(Rank.values())
+                .filter(rank -> rank.value == value)
+                .findAny()
+                .orElseThrow(() -> new IllegalArgumentException(RANK_NOT_FOUND_EXCEPTION));
     }
 }

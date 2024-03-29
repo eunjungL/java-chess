@@ -24,8 +24,4 @@ public record Command(String command, String source, String destination) {
     public boolean isCreateCommand() {
         return command.equals("create");
     }
-
-    public boolean isEnterCommand() {
-        return command.equals("enter");
-    }
 }
