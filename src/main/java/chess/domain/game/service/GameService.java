@@ -21,4 +21,8 @@ public class GameService {
                 .map(String::valueOf)
                 .toList();
     }
+
+    public boolean existById(String gameId) {
+        return gameDao.existsById(gameId);
+    }
 }

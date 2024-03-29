@@ -60,7 +60,14 @@ public class ChessGame {
             return gameService.createGame();
         }
 
+        validateExistGame(gameCommand);
         return Integer.parseInt(gameCommand.source());
+    }
+
+    private void validateExistGame(Command gameCommand) {
+        if (!gameService.existById(gameCommand.source())) {
+            throw new IllegalArgumentException("존재하지 않는 게임입니다.");
+        }
     }
 
     private Command readGameCommand() {

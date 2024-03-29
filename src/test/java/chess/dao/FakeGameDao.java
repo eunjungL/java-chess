@@ -60,4 +60,9 @@ public class FakeGameDao implements GameDao {
         GameState gameState = game.get(gameId);
         game.replace(gameId, new GameState(gameState.boardState, campType));
     }
+
+    @Override
+    public boolean existsById(String gameId) {
+        return game.containsKey(Integer.parseInt(gameId));
+    }
 }

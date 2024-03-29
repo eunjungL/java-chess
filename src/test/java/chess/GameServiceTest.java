@@ -43,4 +43,17 @@ class GameServiceTest {
         // then
         assertThat(actual).isEqualTo(List.of("1", "2"));
     }
+
+    @DisplayName("게임 서비스는 게임의 존재 여부를 확인한다.")
+    @Test
+    void existById() {
+        // given
+        int gameId = gameService.createGame();
+
+        // when
+        boolean actual = gameService.existById(String.valueOf(gameId));
+
+        // then
+        assertThat(actual).isTrue();
+    }
 }

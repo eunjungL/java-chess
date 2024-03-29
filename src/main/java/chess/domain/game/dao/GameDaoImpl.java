@@ -22,6 +22,7 @@ public class GameDaoImpl implements GameDao {
         this.connection = DBConnection.getConnection();
     }
 
+    @Override
     public int save() {
         try {
             PreparedStatement statement = connection
@@ -41,6 +42,7 @@ public class GameDaoImpl implements GameDao {
         }
     }
 
+    @Override
     public BoardState findStateById(int gameId) {
         try {
             PreparedStatement statement = connection.prepareStatement("SELECT * FROM game WHERE id = ?");
@@ -76,6 +78,7 @@ public class GameDaoImpl implements GameDao {
         throw new IllegalArgumentException(STATE_NOT_FOUND);
     }
 
+    @Override
     public List<Integer> findAllId() {
         try {
             PreparedStatement statement = connection.prepareStatement("SELECT id FROM game");
@@ -93,6 +96,7 @@ public class GameDaoImpl implements GameDao {
         }
     }
 
+    @Override
     public void update(int gameId, StateName stateName) {
         try {
             PreparedStatement statement = connection.prepareStatement("UPDATE game SET state = ? WHERE id = ?");
@@ -106,6 +110,7 @@ public class GameDaoImpl implements GameDao {
 
     }
 
+    @Override
     public void update(int gameId, CampType campType) {
         try {
             PreparedStatement statement = connection.prepareStatement("UPDATE game SET winner_camp = ? WHERE id = ?");
@@ -115,6 +120,20 @@ public class GameDaoImpl implements GameDao {
             statement.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(UPDATE_EXCEPTION);
+        }
+    }
+
+    @Override
+    public boolean existsById(String gameId) {
+        try {
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM game WHERE id = ?");
+            statement.setString(1, gameId);
+
+            ResultSet resultSet = statement.executeQuery();
+
+            return resultSet.next();
+        } catch (SQLException e) {
+            throw new RuntimeException(GAME_NOT_FOUND);
         }
     }
 }

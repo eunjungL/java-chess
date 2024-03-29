@@ -17,4 +17,6 @@ public interface GameDao {
     void update(int gameId, StateName stateName);
 
     void update(int gameId, CampType campType);
+
+    boolean existsById(String gameId);
 }
