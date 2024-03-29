@@ -1,4 +1,4 @@
-package chess;
+package chess.domain.game.dao;
 
 import chess.domain.board.state.*;
 import chess.domain.piece.CampType;
@@ -8,7 +8,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GameDao {
+public class GameDaoImpl implements GameDao {
 
     private static final String SAVE_EXCEPTION = "Game 테이블에 정보를 저장하던 중 오류가 발생했습니다.";
     private static final String GAME_NOT_FOUND = "존재하지 않는 게임입니다.";
@@ -18,7 +18,7 @@ public class GameDao {
 
     private final Connection connection;
 
-    public GameDao() {
+    public GameDaoImpl() {
         this.connection = DBConnection.getConnection();
     }
 
@@ -30,7 +30,7 @@ public class GameDao {
 
             statement.executeUpdate();
 
-            ResultSet resultSet =  statement.getGeneratedKeys();
+            ResultSet resultSet = statement.getGeneratedKeys();
             if (resultSet.next()) {
                 return resultSet.getInt(1);
             }

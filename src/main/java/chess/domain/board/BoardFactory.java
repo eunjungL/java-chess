@@ -1,6 +1,6 @@
 package chess.domain.board;
 
-import chess.domain.board.dao.BoardDao;
+import chess.domain.board.dao.BoardDaoImpl;
 import chess.domain.square.File;
 import chess.domain.square.Square;
 import chess.domain.square.Rank;
@@ -17,10 +17,10 @@ public class BoardFactory {
     public static final int EMPTY_PIECE_FROM = 2;
     public static final int EMPTY_PIECE_TO = 6;
 
-    private final BoardDao boardDao;
+    private final BoardDaoImpl boardDaoImpl;
 
     public BoardFactory() {
-        boardDao = new BoardDao();
+        boardDaoImpl = new BoardDaoImpl();
     }
 
     public Map<Square, Piece> create() {
@@ -28,7 +28,7 @@ public class BoardFactory {
     }
 
     public Map<Square, Piece> create(int gameId) {
-        Optional<Map<Square, Piece>> board = boardDao.findByGameId(gameId);
+        Optional<Map<Square, Piece>> board = boardDaoImpl.findByGameId(gameId);
 
         return board.orElseGet(this::makeNewBoard);
     }

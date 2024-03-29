@@ -1,11 +1,11 @@
 package chess.domain.board.service;
 
-import chess.GameDao;
 import chess.domain.board.Board;
 import chess.domain.board.BoardFactory;
 import chess.domain.board.dao.BoardDao;
 import chess.domain.board.dto.MoveCommand;
 import chess.domain.board.state.BoardState;
+import chess.domain.game.dao.GameDao;
 import chess.domain.piece.Piece;
 import chess.domain.square.Square;
 
@@ -16,9 +16,9 @@ public class BoardService {
     private final BoardDao boardDao;
     private final GameDao gameDao;
 
-    public BoardService() {
-        this.boardDao = new BoardDao();
-        this.gameDao = new GameDao();
+    public BoardService(BoardDao boardDao, GameDao gameDao) {
+        this.boardDao = boardDao;
+        this.gameDao = gameDao;
     }
 
     public Board createBoard(int gameId) {

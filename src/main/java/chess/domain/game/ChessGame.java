@@ -1,8 +1,10 @@
-package chess;
+package chess.domain.game;
 
 import chess.domain.board.Board;
+import chess.domain.board.dao.BoardDaoImpl;
 import chess.domain.board.dto.GameResult;
 import chess.domain.board.service.BoardService;
+import chess.domain.game.dao.GameDaoImpl;
 import chess.domain.piece.Piece;
 import chess.domain.square.File;
 import chess.domain.square.Rank;
@@ -28,7 +30,7 @@ public class ChessGame {
     public ChessGame() {
         this.inputView = new InputView();
         this.outputView = new OutputView();
-        this.boardService = new BoardService();
+        this.boardService = new BoardService(new BoardDaoImpl(), new GameDaoImpl());
     }
 
     public void play() {
@@ -47,14 +49,14 @@ public class ChessGame {
 
     private int makeGame(Command gameCommand) {
         if (gameCommand.isCreateCommand()) {
-            return new GameDao().save();
+            return new GameDaoImpl().save();
         }
 
         return Integer.parseInt(gameCommand.source());
     }
 
     private Command readGameCommand() {
-        List<String> gameIds = new GameDao().findAllId();
+        List<String> gameIds = new GameDaoImpl().findAllId();
         return inputView.readGameCommand(gameIds);
     }
 
