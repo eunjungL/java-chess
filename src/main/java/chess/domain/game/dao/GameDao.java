@@ -12,7 +12,7 @@ public interface GameDao {
 
     BoardState findStateById(int gameId);
 
-    List<String> findAllId();
+    List<Integer> findAllId();
 
     void update(int gameId, StateName stateName);
 

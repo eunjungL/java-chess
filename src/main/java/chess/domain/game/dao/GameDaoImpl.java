@@ -76,15 +76,15 @@ public class GameDaoImpl implements GameDao {
         throw new IllegalArgumentException(STATE_NOT_FOUND);
     }
 
-    public List<String> findAllId() {
+    public List<Integer> findAllId() {
         try {
             PreparedStatement statement = connection.prepareStatement("SELECT id FROM game");
 
             ResultSet resultSet = statement.executeQuery();
 
-            List<String> gameIds = new ArrayList<>();
+            List<Integer> gameIds = new ArrayList<>();
             while (resultSet.next()) {
-                gameIds.add(resultSet.getString("id"));
+                gameIds.add(resultSet.getInt("id"));
             }
 
             return gameIds;

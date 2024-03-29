@@ -1,9 +1,12 @@
 package chess.domain.game;
 
+import chess.GameService;
 import chess.domain.board.Board;
+import chess.domain.board.dao.BoardDao;
 import chess.domain.board.dao.BoardDaoImpl;
 import chess.domain.board.dto.GameResult;
 import chess.domain.board.service.BoardService;
+import chess.domain.game.dao.GameDao;
 import chess.domain.game.dao.GameDaoImpl;
 import chess.domain.piece.Piece;
 import chess.domain.square.File;
@@ -26,11 +29,16 @@ public class ChessGame {
     private final InputView inputView;
     private final OutputView outputView;
     private final BoardService boardService;
+    private final GameService gameService;
 
     public ChessGame() {
         this.inputView = new InputView();
         this.outputView = new OutputView();
-        this.boardService = new BoardService(new BoardDaoImpl(), new GameDaoImpl());
+
+        BoardDao boardDao = new BoardDaoImpl();
+        GameDao gameDao = new GameDaoImpl();
+        this.boardService = new BoardService(boardDao, gameDao);
+        this.gameService = new GameService(gameDao);
     }
 
     public void play() {
@@ -49,14 +57,14 @@ public class ChessGame {
 
     private int makeGame(Command gameCommand) {
         if (gameCommand.isCreateCommand()) {
-            return new GameDaoImpl().save();
+            return gameService.createGame();
         }
 
         return Integer.parseInt(gameCommand.source());
     }
 
     private Command readGameCommand() {
-        List<String> gameIds = new GameDaoImpl().findAllId();
+        List<String> gameIds = gameService.findAllId();
         return inputView.readGameCommand(gameIds);
     }
 

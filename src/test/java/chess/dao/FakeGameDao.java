@@ -35,9 +35,8 @@ public class FakeGameDao implements GameDao {
     }
 
     @Override
-    public List<String> findAllId() {
+    public List<Integer> findAllId() {
         return game.keySet().stream()
-                .map(String::valueOf)
                 .toList();
     }
 
