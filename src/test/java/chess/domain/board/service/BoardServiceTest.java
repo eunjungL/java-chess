@@ -1,7 +1,7 @@
 package chess.domain.board.service;
 
-import chess.dao.FakeBoardDao;
-import chess.dao.FakeGameDao;
+import chess.domain.board.dao.FakeBoardDao;
+import chess.game.dao.FakeGameDao;
 import chess.domain.board.Board;
 import chess.domain.board.BoardFactory;
 import chess.domain.board.dao.BoardDao;
@@ -30,33 +30,34 @@ class BoardServiceTest {
     private BoardService boardService;
     private BoardDao fakeBoardDao;
     private GameDao fakeGameDao;
+    private int gameId;
 
     @BeforeEach
     void setUp() {
         fakeBoardDao = new FakeBoardDao();
         fakeGameDao = new FakeGameDao();
         boardService = new BoardService(fakeBoardDao, fakeGameDao);
+
+        gameId = fakeGameDao.save();
     }
 
     @DisplayName("체스판 서비스는 체스판을 생성한다.")
     @Test
     void createBoard() {
-        // given
-        int gameId = fakeGameDao.save();
-
         // when
         Board actual = boardService.createBoard(gameId);
         Map<Square, Piece> expected = new BoardFactory().create();
 
         // then
-        assertThat(actual.toBoardOutput().board()).usingRecursiveComparison().isEqualTo(expected);
+        assertThat(actual.toBoardOutput().board())
+                .usingRecursiveComparison()
+                .isEqualTo(expected);
     }
 
     @DisplayName("체스판 서비스는 체스판의 체스말을 움직인다.")
     @Test
     void move() {
         // given
-        int gameId = fakeGameDao.save();
         Board board = boardService.createBoard(gameId);
         MoveCommand moveCommand = new MoveCommand(Square.of(File.A, Rank.TWO), Square.of(File.A, Rank.FOUR));
 
@@ -78,7 +79,6 @@ class BoardServiceTest {
     @Test
     void updateGameWhenGameOver() {
         // given
-        int gameId = fakeGameDao.save();
         Board board = boardService.createBoard(gameId);
 
         boardService.move(gameId, board, new MoveCommand(Square.of(File.F, Rank.TWO), Square.of(File.F, Rank.THREE)));

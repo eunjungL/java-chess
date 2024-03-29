@@ -24,7 +24,8 @@ class GameOverStateTest {
     @Test
     void nextStateException() {
         // when & then
-        assertThatThrownBy(() -> boardState.nextTurnState()).isInstanceOf(UnsupportedOperationException.class);
+        assertThatThrownBy(() -> boardState.nextTurnState())
+                .isInstanceOf(UnsupportedOperationException.class);
     }
 
     @DisplayName("게임 종료 상태에서 움직임 가능 여부를 확인하면 예외가 발생한다.")

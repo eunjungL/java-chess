@@ -1,6 +1,5 @@
-package chess.domain;
+package chess.util;
 
-import chess.util.DBConnection;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

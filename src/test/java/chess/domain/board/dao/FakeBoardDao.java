@@ -1,6 +1,5 @@
-package chess.dao;
+package chess.domain.board.dao;
 
-import chess.domain.board.dao.BoardDao;
 import chess.domain.piece.Piece;
 import chess.domain.square.Square;
 

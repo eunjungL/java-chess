@@ -33,7 +33,8 @@ public class BoardTest {
         Square destination = Square.of(File.A, Rank.SEVEN);
 
         // when & then
-        assertThatThrownBy(() -> board.move(source, destination)).isInstanceOf(IllegalArgumentException.class);
+        assertThatThrownBy(() -> board.move(source, destination))
+                .isInstanceOf(IllegalArgumentException.class);
     }
 
     @DisplayName("체스판은 출발지에서 목적지로 말을 옮긴다.")
@@ -55,7 +56,8 @@ public class BoardTest {
         Square destination = Square.of(File.A, Rank.FIVE);
 
         // when & then
-        assertThatThrownBy(() -> board.move(source, destination)).isInstanceOf(IllegalArgumentException.class);
+        assertThatThrownBy(() -> board.move(source, destination))
+                .isInstanceOf(IllegalArgumentException.class);
     }
 
     @DisplayName("체스판은 목적지로 가는 경로에 다른 말이 없으면 예외가 발생하지 않는다.")
@@ -77,7 +79,8 @@ public class BoardTest {
         Square destination = Square.of(File.C, Rank.THREE);
 
         // when & then
-        assertThatThrownBy(() -> board.move(source, destination)).isInstanceOf(IllegalArgumentException.class);
+        assertThatThrownBy(() -> board.move(source, destination))
+                .isInstanceOf(IllegalArgumentException.class);
     }
 
     @DisplayName("체스판은 말의 규칙에 따라 갈 수 있는 도착지가 들어오면 예외가 발생하지 않는다.")
@@ -99,7 +102,8 @@ public class BoardTest {
         Square destination = Square.of(File.C, Rank.SIX);
 
         // when & then
-        assertThatThrownBy(() -> board.move(source, destination)).isInstanceOf(IllegalArgumentException.class);
+        assertThatThrownBy(() -> board.move(source, destination))
+                .isInstanceOf(IllegalArgumentException.class);
     }
 
     @DisplayName("체스판은 말을 이동할 때 도착지에 다른 색의 말이 있으면 말을 잡는다.")

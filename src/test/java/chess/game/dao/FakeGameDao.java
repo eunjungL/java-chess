@@ -1,4 +1,4 @@
-package chess.dao;
+package chess.game.dao;
 
 import chess.domain.board.state.*;
 import chess.domain.game.dao.GameDao;

@@ -58,6 +58,7 @@ public class BlackTurnStateTest {
     @Test
     void findWinnerException() {
         // when & then
-        assertThatThrownBy(() -> boardState.findWinner()).isInstanceOf(UnsupportedOperationException.class);
+        assertThatThrownBy(() -> boardState.findWinner())
+                .isInstanceOf(UnsupportedOperationException.class);
     }
 }
