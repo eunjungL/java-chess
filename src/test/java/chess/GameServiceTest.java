@@ -1,6 +1,7 @@
 package chess;
 
 import chess.dao.FakeGameDao;
+import chess.domain.game.service.GameService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

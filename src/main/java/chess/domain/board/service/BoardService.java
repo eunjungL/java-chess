@@ -23,14 +23,17 @@ public class BoardService {
 
     public Board createBoard(int gameId) {
         Map<Square, Piece> board = boardDao.findByGameId(gameId)
-                .orElseGet(() -> {
-                    Map<Square, Piece> newBoard = new BoardFactory().create();
-                    boardDao.saveAll(gameId, newBoard);
-                    return newBoard;
-                });
+                .orElseGet(() -> createNewBoard(gameId));
         BoardState boardState = gameDao.findStateById(gameId);
 
         return new Board(board, boardState);
+    }
+
+    private Map<Square, Piece> createNewBoard(int gameId) {
+        Map<Square, Piece> newBoard = new BoardFactory().create();
+        boardDao.saveAll(gameId, newBoard);
+
+        return newBoard;
     }
 
     public void move(int gameId, Board board, MoveCommand moveCommand) {
