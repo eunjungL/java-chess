@@ -6,6 +6,8 @@ import chess.domain.board.Board;
 import chess.domain.board.BoardFactory;
 import chess.domain.board.dao.BoardDao;
 import chess.domain.board.dto.MoveCommand;
+import chess.domain.board.state.BoardState;
+import chess.domain.board.state.GameOverState;
 import chess.domain.game.dao.GameDao;
 import chess.domain.piece.CampType;
 import chess.domain.piece.Piece;
@@ -70,5 +72,26 @@ class BoardServiceTest {
                 () -> assertThat(destinationActual.getPieceType()).isEqualTo(PieceType.EMPTY),
                 () -> assertThat(destinationActual.getCampType()).isEqualTo(CampType.EMPTY)
         );
+    }
+
+    @DisplayName("체스판 서비스는 게임이 종료되면 정보를 업데이트한다.")
+    @Test
+    void updateGameWhenGameOver() {
+        // given
+        int gameId = fakeGameDao.save();
+        Board board = boardService.createBoard(gameId);
+
+        boardService.move(gameId, board, new MoveCommand(Square.of(File.F, Rank.TWO), Square.of(File.F, Rank.THREE)));
+        boardService.move(gameId, board, new MoveCommand(Square.of(File.E, Rank.SEVEN), Square.of(File.E, Rank.FIVE)));
+        boardService.move(gameId, board, new MoveCommand(Square.of(File.G, Rank.TWO), Square.of(File.G, Rank.FOUR)));
+        boardService.move(gameId, board, new MoveCommand(Square.of(File.D, Rank.EIGHT), Square.of(File.H, Rank.FOUR)));
+        boardService.move(gameId, board, new MoveCommand(Square.of(File.H, Rank.TWO), Square.of(File.H, Rank.THREE)));
+        boardService.move(gameId, board, new MoveCommand(Square.of(File.H, Rank.FOUR), Square.of(File.E, Rank.ONE)));
+
+        // when
+        BoardState actual = fakeGameDao.findStateById(gameId);
+
+        // then
+        assertThat(actual).isInstanceOf(GameOverState.class);
     }
 }
