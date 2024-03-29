@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-public class FakeBoardDao implements BoardDao {
+public class FakeBoardDao implements BoardRepository {
 
     private final Map<Integer, Map<Square, Piece>> board;
 

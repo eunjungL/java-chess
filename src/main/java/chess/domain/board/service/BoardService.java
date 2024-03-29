@@ -2,11 +2,11 @@ package chess.domain.board.service;
 
 import chess.domain.board.Board;
 import chess.domain.board.BoardFactory;
-import chess.domain.board.dao.BoardDao;
+import chess.domain.board.dao.BoardRepository;
 import chess.domain.board.dto.MoveCommand;
 import chess.domain.board.state.BoardState;
 import chess.domain.board.state.StateName;
-import chess.domain.game.dao.GameDao;
+import chess.domain.game.dao.GameRepository;
 import chess.domain.piece.Piece;
 import chess.domain.square.Square;
 
@@ -14,24 +14,24 @@ import java.util.Map;
 
 public class BoardService {
 
-    private final BoardDao boardDao;
-    private final GameDao gameDao;
+    private final BoardRepository boardRepository;
+    private final GameRepository gameRepository;
 
-    public BoardService(BoardDao boardDao, GameDao gameDao) {
-        this.boardDao = boardDao;
-        this.gameDao = gameDao;
+    public BoardService(BoardRepository boardRepository, GameRepository gameRepository) {
+        this.boardRepository = boardRepository;
+        this.gameRepository = gameRepository;
     }
 
     public Board createBoard(int gameId) {
-        Map<Square, Piece> board = boardDao.findByGameId(gameId)
+        Map<Square, Piece> board = boardRepository.findByGameId(gameId)
                 .orElseGet(() -> createNewBoard(gameId));
 
-        return new Board(board, gameDao.findStateById(gameId));
+        return new Board(board, gameRepository.findStateById(gameId));
     }
 
     private Map<Square, Piece> createNewBoard(int gameId) {
         Map<Square, Piece> newBoard = new BoardFactory().create();
-        boardDao.saveAll(gameId, newBoard);
+        boardRepository.saveAll(gameId, newBoard);
 
         return newBoard;
     }
@@ -41,13 +41,13 @@ public class BoardService {
         Square destination = moveCommand.destination();
 
         Piece destinationPiece = board.move(source, destination);
-        boardDao.update(gameId, source, destinationPiece);
-        boardDao.update(gameId, destination, board.findPieceBySquare(destination));
+        boardRepository.update(gameId, source, destinationPiece);
+        boardRepository.update(gameId, destination, board.findPieceBySquare(destination));
 
         BoardState boardState = board.getBoardState();
-        gameDao.update(gameId, boardState.getSateName());
+        gameRepository.update(gameId, boardState.getSateName());
         if (boardState.getSateName().equals(StateName.GAME_OVER)) {
-            gameDao.update(gameId, boardState.findWinner());
+            gameRepository.update(gameId, boardState.findWinner());
         }
     }
 }

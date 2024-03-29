@@ -1,14 +1,14 @@
 package chess.game.dao;
 
 import chess.domain.board.state.*;
-import chess.domain.game.dao.GameDao;
+import chess.domain.game.dao.GameRepository;
 import chess.domain.piece.CampType;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class FakeGameDao implements GameDao {
+public class FakeGameDao implements GameRepository {
 
     private record GameState(BoardState boardState, CampType winnerCamp) {
     }

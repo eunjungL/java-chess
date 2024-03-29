@@ -1,28 +1,28 @@
 package chess.domain.game.service;
 
-import chess.domain.game.dao.GameDao;
+import chess.domain.game.dao.GameRepository;
 
 import java.util.List;
 
 public class GameService {
 
-    private final GameDao gameDao;
+    private final GameRepository gameRepository;
 
-    public GameService(GameDao gameDao) {
-        this.gameDao = gameDao;
+    public GameService(GameRepository gameRepository) {
+        this.gameRepository = gameRepository;
     }
 
     public int createGame() {
-        return gameDao.save();
+        return gameRepository.save();
     }
 
     public List<String> findAllId() {
-        return gameDao.findAllId().stream()
+        return gameRepository.findAllId().stream()
                 .map(String::valueOf)
                 .toList();
     }
 
     public boolean existById(String gameId) {
-        return gameDao.existsById(gameId);
+        return gameRepository.existsById(gameId);
     }
 }

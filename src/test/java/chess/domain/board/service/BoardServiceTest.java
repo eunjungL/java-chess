@@ -4,11 +4,11 @@ import chess.domain.board.dao.FakeBoardDao;
 import chess.game.dao.FakeGameDao;
 import chess.domain.board.Board;
 import chess.domain.board.BoardFactory;
-import chess.domain.board.dao.BoardDao;
+import chess.domain.board.dao.BoardRepository;
 import chess.domain.board.dto.MoveCommand;
 import chess.domain.board.state.BoardState;
 import chess.domain.board.state.GameOverState;
-import chess.domain.game.dao.GameDao;
+import chess.domain.game.dao.GameRepository;
 import chess.domain.piece.CampType;
 import chess.domain.piece.Piece;
 import chess.domain.piece.PieceType;
@@ -28,17 +28,17 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 class BoardServiceTest {
 
     private BoardService boardService;
-    private BoardDao fakeBoardDao;
-    private GameDao fakeGameDao;
+    private BoardRepository fakeBoardRepository;
+    private GameRepository fakeGameRepository;
     private int gameId;
 
     @BeforeEach
     void setUp() {
-        fakeBoardDao = new FakeBoardDao();
-        fakeGameDao = new FakeGameDao();
-        boardService = new BoardService(fakeBoardDao, fakeGameDao);
+        fakeBoardRepository = new FakeBoardDao();
+        fakeGameRepository = new FakeGameDao();
+        boardService = new BoardService(fakeBoardRepository, fakeGameRepository);
 
-        gameId = fakeGameDao.save();
+        gameId = fakeGameRepository.save();
     }
 
     @DisplayName("체스판 서비스는 체스판을 생성한다.")
@@ -89,7 +89,7 @@ class BoardServiceTest {
         boardService.move(gameId, board, new MoveCommand(Square.of(File.H, Rank.FOUR), Square.of(File.E, Rank.ONE)));
 
         // when
-        BoardState actual = fakeGameDao.findStateById(gameId);
+        BoardState actual = fakeGameRepository.findStateById(gameId);
 
         // then
         assertThat(actual).isInstanceOf(GameOverState.class);

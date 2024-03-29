@@ -2,12 +2,12 @@ package chess.domain.game;
 
 import chess.domain.game.service.GameService;
 import chess.domain.board.Board;
+import chess.domain.board.dao.BoardRepository;
 import chess.domain.board.dao.BoardDao;
-import chess.domain.board.dao.BoardDaoImpl;
 import chess.domain.board.dto.GameResult;
 import chess.domain.board.service.BoardService;
+import chess.domain.game.dao.GameRepository;
 import chess.domain.game.dao.GameDao;
-import chess.domain.game.dao.GameDaoImpl;
 import chess.domain.piece.Piece;
 import chess.domain.square.File;
 import chess.domain.square.Rank;
@@ -35,10 +35,10 @@ public class ChessGame {
         this.inputView = new InputView();
         this.outputView = new OutputView();
 
-        BoardDao boardDao = new BoardDaoImpl();
-        GameDao gameDao = new GameDaoImpl();
-        this.boardService = new BoardService(boardDao, gameDao);
-        this.gameService = new GameService(gameDao);
+        BoardRepository boardRepository = new BoardDao();
+        GameRepository gameRepository = new GameDao();
+        this.boardService = new BoardService(boardRepository, gameRepository);
+        this.gameService = new GameService(gameRepository);
     }
 
     public void play() {
