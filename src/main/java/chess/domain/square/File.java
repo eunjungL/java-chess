@@ -15,8 +15,8 @@ public enum File {
     H("h"),
     ;
 
-    private static final String OUT_OF_RANGE_ERROR = "더 이상 이동할 수 없습니다.";
-    private static final String FILE_NOT_FOUND_ERROR = "존재하지 않는 파일입니다.";
+    private static final String OUT_OF_RANGE_EXCEPTION = "더 이상 이동할 수 없습니다.";
+    private static final String FILE_NOT_FOUND_EXCEPTION = "존재하지 않는 파일입니다.";
 
     private final String command;
 
@@ -35,7 +35,7 @@ public enum File {
 
     private void validateIndexBound(int targetIndex, List<File> files) {
         if (targetIndex < 0 || files.size() <= targetIndex) {
-            throw new IndexOutOfBoundsException(OUT_OF_RANGE_ERROR);
+            throw new IndexOutOfBoundsException(OUT_OF_RANGE_EXCEPTION);
         }
     }
 
@@ -49,6 +49,6 @@ public enum File {
         return Arrays.stream(File.values())
                 .filter(file -> file.command.equals(command))
                 .findAny()
-                .orElseThrow(() -> new IllegalArgumentException(FILE_NOT_FOUND_ERROR));
+                .orElseThrow(() -> new IllegalArgumentException(FILE_NOT_FOUND_EXCEPTION));
     }
 }

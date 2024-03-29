@@ -25,9 +25,8 @@ public class BoardService {
     public Board createBoard(int gameId) {
         Map<Square, Piece> board = boardDao.findByGameId(gameId)
                 .orElseGet(() -> createNewBoard(gameId));
-        BoardState boardState = gameDao.findStateById(gameId);
 
-        return new Board(board, boardState);
+        return new Board(board, gameDao.findStateById(gameId));
     }
 
     private Map<Square, Piece> createNewBoard(int gameId) {
@@ -41,7 +40,7 @@ public class BoardService {
         Square source = moveCommand.source();
         Square destination = moveCommand.destination();
 
-        Piece destinationPiece = board.movePiece(source, destination);
+        Piece destinationPiece = board.move(source, destination);
         boardDao.update(gameId, source, destinationPiece);
         boardDao.update(gameId, destination, board.findPieceBySquare(destination));
 

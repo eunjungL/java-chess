@@ -1,12 +1,11 @@
 package chess.domain.board;
 
-import chess.domain.board.dao.BoardDaoImpl;
-import chess.domain.square.File;
-import chess.domain.square.Square;
-import chess.domain.square.Rank;
 import chess.domain.piece.CampType;
 import chess.domain.piece.Piece;
 import chess.domain.piece.PieceType;
+import chess.domain.square.File;
+import chess.domain.square.Rank;
+import chess.domain.square.Square;
 
 import java.util.*;
 
@@ -17,23 +16,10 @@ public class BoardFactory {
     public static final int EMPTY_PIECE_FROM = 2;
     public static final int EMPTY_PIECE_TO = 6;
 
-    private final BoardDaoImpl boardDaoImpl;
-
     public BoardFactory() {
-        boardDaoImpl = new BoardDaoImpl();
     }
 
     public Map<Square, Piece> create() {
-        return makeNewBoard();
-    }
-
-    public Map<Square, Piece> create(int gameId) {
-        Optional<Map<Square, Piece>> board = boardDaoImpl.findByGameId(gameId);
-
-        return board.orElseGet(this::makeNewBoard);
-    }
-
-    private Map<Square, Piece> makeNewBoard() {
         Map<Square, Piece> board = new HashMap<>();
 
         makeBlackPiece(board);
