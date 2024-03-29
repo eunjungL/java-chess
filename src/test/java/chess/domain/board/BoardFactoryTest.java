@@ -24,7 +24,6 @@ public class BoardFactoryTest {
         BoardFactory boardFactory = new BoardFactory();
 
         // when
-        // TODO: DB 영향 받아서 테스트 깨지는 부분 해결하기
         Map<Square, Piece> actual = boardFactory.create();
 
         // then

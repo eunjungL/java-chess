@@ -117,17 +117,4 @@ public class GameDao {
             throw new RuntimeException(UPDATE_EXCEPTION);
         }
     }
-
-    public boolean existsById(int gameId) {
-        try {
-            PreparedStatement statement = connection.prepareStatement("SELECT * FROM game WHERE id = ?");
-            statement.setInt(1, gameId);
-
-            ResultSet resultSet = statement.executeQuery();
-
-            return resultSet.next();
-        } catch (SQLException e) {
-            throw new RuntimeException(READ_EXCEPTION);
-        }
-    }
 }
