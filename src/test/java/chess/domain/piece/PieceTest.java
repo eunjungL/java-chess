@@ -16,20 +16,6 @@ public class PieceTest {
         assertThatCode(() -> new Piece(PieceType.KING, CampType.WHITE)).doesNotThrowAnyException();
     }
 
-    @DisplayName("체스말은 같은 색인지 여부를 반환한다.")
-    @Test
-    void checkSameColor() {
-        // given
-        Piece blackPiece = new Piece(PieceType.PAWN, CampType.BLACK);
-        Piece whitePiece = new Piece(PieceType.ROOK, CampType.WHITE);
-
-        // when
-        boolean actual = blackPiece.isSameColor(whitePiece);
-
-        // then
-        assertThat(actual).isFalse();
-    }
-
     @DisplayName("체스말은 타입에 따른 점수를 반환한다.")
     @Test
     void calculateScore() {

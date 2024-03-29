@@ -117,7 +117,7 @@ public class BoardTest {
 
         // then
         assertThat(actual.getPieceType().equals(PieceType.PAWN)
-                && actual.isSameColor(new Piece(PieceType.PAWN, CampType.WHITE)))
+                && actual.getCampType().equals(CampType.WHITE))
                 .isTrue();
     }
 

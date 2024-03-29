@@ -18,6 +18,7 @@ public enum PieceType {
     ;
 
     private static final double PAWN_PENALTY_SCORE = 0.5;
+    public static final String PIECE_TYPE_NOT_FOUND = "존재하지 않는 체스말 종류입니다.";
 
     private final LegalMoveCheckStrategy legalMoveCheckStrategy;
     private final double score;
@@ -31,22 +32,22 @@ public enum PieceType {
         return legalMoveCheckStrategy.check(source, destination, board);
     }
 
+    public static PieceType findByName(String name) {
+        return Arrays.stream(PieceType.values())
+                .filter(pieceType -> pieceType.name().equals(name))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException(PIECE_TYPE_NOT_FOUND));
+    }
+
     public double getScore() {
         return score;
     }
 
     public double getScore(double duplicatedPawnCount) {
-        if (this.equals(PieceType.PAWN) && duplicatedPawnCount >= 2) {
+        if (this.equals(PieceType.PAWN) && duplicatedPawnCount > 1) {
             return PAWN_PENALTY_SCORE;
         }
 
         return score;
-    }
-
-    public static PieceType findByName(String name) {
-        return Arrays.stream(PieceType.values())
-                .filter(pieceType -> pieceType.name().equals(name))
-                .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 체스말 종류입니다."));
     }
 }

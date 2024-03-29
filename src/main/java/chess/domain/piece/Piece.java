@@ -21,16 +21,8 @@ public class Piece {
         return campType.equals(CampType.WHITE);
     }
 
-    public boolean isSameColor(Piece whitePiece) {
-        return campType.equals(whitePiece.campType);
-    }
-
     public boolean isNotEmpty() {
         return !pieceType.equals(PieceType.EMPTY);
-    }
-
-    public boolean canMove(Square source, Square destination, Board board) {
-        return pieceType.canMove(source, destination, board);
     }
 
     public boolean isKing() {
@@ -39,6 +31,10 @@ public class Piece {
 
     public boolean isPawn() {
         return pieceType.equals(PieceType.PAWN);
+    }
+
+    public boolean canMove(Square source, Square destination, Board board) {
+        return pieceType.canMove(source, destination, board);
     }
 
     public double calculateScore() {
