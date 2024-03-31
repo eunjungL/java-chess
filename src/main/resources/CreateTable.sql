@@ -14,11 +14,10 @@ CREATE TABLE game
 
 CREATE TABLE board
 (
-    id       int         not null auto_increment,
     game_id  int         not null,
     square   varchar(20) not null,
     piece_id int         not null,
-    constraint primary key (id, square),
+    constraint primary key (game_id, square),
     constraint foreign key (piece_id) references piece (id),
     constraint foreign key (game_id) references game (id)
 );
