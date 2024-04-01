@@ -13,18 +13,18 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 @DisplayName("흰색 말 차례")
 public class WhiteTurnStateTest {
 
-    private BoardState boardState;
+    private GameProgressState gameProgressState;
 
     @BeforeEach
     void setUp() {
-        boardState = new WhiteTurnState();
+        gameProgressState = new WhiteTurnState();
     }
 
     @DisplayName("흰색 말 차례에서 다음 차례로 넘어가면 검은 말 차례를 반환한다.")
     @Test
     void nextState() {
         // when
-        BoardState actual = boardState.nextTurnState();
+        GameProgressState actual = gameProgressState.nextTurnState();
 
         // then
         assertThat(actual).isInstanceOf(BlackTurnState.class);
@@ -34,7 +34,7 @@ public class WhiteTurnStateTest {
     @Test
     void gameOverState() {
         // when
-        BoardState actual = boardState.makeGameOver();
+        GameProgressState actual = gameProgressState.makeGameOver();
 
         // then
         assertThat(actual).isInstanceOf(GameOverState.class);
@@ -48,7 +48,7 @@ public class WhiteTurnStateTest {
         Piece destination = new Piece(PieceType.PAWN, CampType.BLACK);
 
         // when
-        boolean actual = boardState.checkMovable(source, destination);
+        boolean actual = gameProgressState.checkMovable(source, destination);
 
         // then
         assertThat(actual).isTrue();
@@ -58,7 +58,7 @@ public class WhiteTurnStateTest {
     @Test
     void findWinnerException() {
         // when & then
-        assertThatThrownBy(() -> boardState.findWinner())
+        assertThatThrownBy(() -> gameProgressState.findWinner())
                 .isInstanceOf(UnsupportedOperationException.class);
     }
 }

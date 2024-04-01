@@ -43,7 +43,7 @@ public class GameDao implements GameRepository {
     }
 
     @Override
-    public BoardState findStateById(int gameId) {
+    public GameProgressState findStateById(int gameId) {
         try {
             PreparedStatement statement = connection.prepareStatement("SELECT * FROM game WHERE id = ?");
             statement.setInt(1, gameId);
@@ -61,7 +61,7 @@ public class GameDao implements GameRepository {
         }
     }
 
-    private BoardState makeBoardState(String stateName, ResultSet resultSet) throws SQLException {
+    private GameProgressState makeBoardState(String stateName, ResultSet resultSet) throws SQLException {
         if (stateName.equals(StateName.BLACK_TURN.name())) {
             return new BlackTurnState();
         }

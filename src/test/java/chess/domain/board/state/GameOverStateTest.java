@@ -13,18 +13,18 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 @DisplayName("게임 종료 상태")
 class GameOverStateTest {
 
-    private BoardState boardState;
+    private GameProgressState gameProgressState;
 
     @BeforeEach
     void setUp() {
-        boardState = new GameOverState(CampType.WHITE);
+        gameProgressState = new GameOverState(CampType.WHITE);
     }
 
     @DisplayName("게임 종료 상태에서 상태 변환을 시도하면 예외가 발생한다.")
     @Test
     void nextStateException() {
         // when & then
-        assertThatThrownBy(() -> boardState.nextTurnState())
+        assertThatThrownBy(() -> gameProgressState.nextTurnState())
                 .isInstanceOf(UnsupportedOperationException.class);
     }
 
@@ -36,7 +36,7 @@ class GameOverStateTest {
         Piece destination = new Piece(PieceType.EMPTY, CampType.EMPTY);
 
         // when & then
-        assertThatThrownBy(() -> boardState.checkMovable(source, destination))
+        assertThatThrownBy(() -> gameProgressState.checkMovable(source, destination))
                 .isInstanceOf(UnsupportedOperationException.class);
     }
 
@@ -44,7 +44,7 @@ class GameOverStateTest {
     @Test
     void findWinner() {
         // when
-        CampType actual = boardState.findWinner();
+        CampType actual = gameProgressState.findWinner();
 
         // then
         assertThat(actual).isEqualTo(CampType.WHITE);

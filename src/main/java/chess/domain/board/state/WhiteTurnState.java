@@ -3,12 +3,12 @@ package chess.domain.board.state;
 import chess.domain.piece.CampType;
 import chess.domain.piece.Piece;
 
-public class WhiteTurnState implements BoardState {
+public class WhiteTurnState implements GameProgressState {
 
     private static final String GAME_NOT_OVER_EXCEPTION = "게임이 아직 종료되지 않았습니다.";
 
     @Override
-    public BoardState nextTurnState() {
+    public GameProgressState nextTurnState() {
         return new BlackTurnState();
     }
 
@@ -18,7 +18,7 @@ public class WhiteTurnState implements BoardState {
     }
 
     @Override
-    public BoardState makeGameOver() {
+    public GameProgressState makeGameOver() {
         return new GameOverState(CampType.WHITE);
     }
 

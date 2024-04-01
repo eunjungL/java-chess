@@ -3,11 +3,15 @@ package chess.domain.board.state;
 import chess.domain.piece.CampType;
 import chess.domain.piece.Piece;
 
-public interface BoardState {
+public interface GameProgressState {
 
-    BoardState nextTurnState();
+    GameProgressState nextTurnState();
+
     boolean checkMovable(Piece source, Piece destination);
-    BoardState makeGameOver();
+
+    GameProgressState makeGameOver();
+
     CampType findWinner();
+
     StateName getSateName();
 }

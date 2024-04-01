@@ -10,7 +10,7 @@ import java.util.Map;
 
 public class FakeGameDao implements GameRepository {
 
-    private record GameState(BoardState boardState, CampType winnerCamp) {
+    private record GameState(GameProgressState gameProgressState, CampType winnerCamp) {
     }
 
     private final Map<Integer, GameState> game;
@@ -29,9 +29,9 @@ public class FakeGameDao implements GameRepository {
     }
 
     @Override
-    public BoardState findStateById(int gameId) {
+    public GameProgressState findStateById(int gameId) {
         GameState gameState = game.get(gameId);
-        return gameState.boardState;
+        return gameState.gameProgressState;
     }
 
     @Override
@@ -46,10 +46,10 @@ public class FakeGameDao implements GameRepository {
         game.replace(gameId, new GameState(findBoardStateByName(stateName, gameState.winnerCamp()), gameState.winnerCamp()));
     }
 
-    private BoardState findBoardStateByName(StateName stateName, CampType winnerCamp) {
-        List<BoardState> boardStates = List.of(new WhiteTurnState(), new BlackTurnState(), new GameOverState(winnerCamp));
+    private GameProgressState findBoardStateByName(StateName stateName, CampType winnerCamp) {
+        List<GameProgressState> gameProgressStates = List.of(new WhiteTurnState(), new BlackTurnState(), new GameOverState(winnerCamp));
 
-        return boardStates.stream()
+        return gameProgressStates.stream()
                 .filter(boardState -> boardState.getSateName().equals(stateName))
                 .findAny()
                 .orElseThrow();
@@ -58,7 +58,7 @@ public class FakeGameDao implements GameRepository {
     @Override
     public void update(int gameId, CampType campType) {
         GameState gameState = game.get(gameId);
-        game.replace(gameId, new GameState(gameState.boardState, campType));
+        game.replace(gameId, new GameState(gameState.gameProgressState, campType));
     }
 
     @Override

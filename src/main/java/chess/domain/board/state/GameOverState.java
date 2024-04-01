@@ -3,7 +3,7 @@ package chess.domain.board.state;
 import chess.domain.piece.CampType;
 import chess.domain.piece.Piece;
 
-public class GameOverState implements BoardState {
+public class GameOverState implements GameProgressState {
 
     private static final String ALREADY_OVER_EXCEPTION = "이미 종료된 게임입니다.";
 
@@ -14,7 +14,7 @@ public class GameOverState implements BoardState {
     }
 
     @Override
-    public BoardState nextTurnState() {
+    public GameProgressState nextTurnState() {
         throw new UnsupportedOperationException(ALREADY_OVER_EXCEPTION);
     }
 
@@ -24,7 +24,7 @@ public class GameOverState implements BoardState {
     }
 
     @Override
-    public BoardState makeGameOver() {
+    public GameProgressState makeGameOver() {
         throw new UnsupportedOperationException(ALREADY_OVER_EXCEPTION);
     }
 

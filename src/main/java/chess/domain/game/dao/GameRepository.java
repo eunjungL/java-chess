@@ -1,6 +1,6 @@
 package chess.domain.game.dao;
 
-import chess.domain.board.state.BoardState;
+import chess.domain.board.state.GameProgressState;
 import chess.domain.board.state.StateName;
 import chess.domain.piece.CampType;
 
@@ -10,7 +10,7 @@ public interface GameRepository {
 
     int save();
 
-    BoardState findStateById(int gameId);
+    GameProgressState findStateById(int gameId);
 
     List<Integer> findAllId();
 

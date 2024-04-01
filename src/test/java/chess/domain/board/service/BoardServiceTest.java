@@ -6,7 +6,7 @@ import chess.domain.board.Board;
 import chess.domain.board.BoardFactory;
 import chess.domain.board.dao.BoardRepository;
 import chess.domain.board.dto.MoveCommand;
-import chess.domain.board.state.BoardState;
+import chess.domain.board.state.GameProgressState;
 import chess.domain.board.state.GameOverState;
 import chess.domain.game.dao.GameRepository;
 import chess.domain.piece.CampType;
@@ -89,7 +89,7 @@ class BoardServiceTest {
         boardService.move(gameId, board, new MoveCommand(Square.of(File.H, Rank.FOUR), Square.of(File.E, Rank.ONE)));
 
         // when
-        BoardState actual = fakeGameRepository.findStateById(gameId);
+        GameProgressState actual = fakeGameRepository.findStateById(gameId);
 
         // then
         assertThat(actual).isInstanceOf(GameOverState.class);

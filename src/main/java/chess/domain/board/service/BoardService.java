@@ -4,7 +4,7 @@ import chess.domain.board.Board;
 import chess.domain.board.BoardFactory;
 import chess.domain.board.dao.BoardRepository;
 import chess.domain.board.dto.MoveCommand;
-import chess.domain.board.state.BoardState;
+import chess.domain.board.state.GameProgressState;
 import chess.domain.board.state.StateName;
 import chess.domain.game.dao.GameRepository;
 import chess.domain.piece.Piece;
@@ -44,10 +44,10 @@ public class BoardService {
         boardRepository.update(gameId, source, destinationPiece);
         boardRepository.update(gameId, destination, board.findPieceBySquare(destination));
 
-        BoardState boardState = board.getBoardState();
-        gameRepository.update(gameId, boardState.getSateName());
-        if (boardState.getSateName().equals(StateName.GAME_OVER)) {
-            gameRepository.update(gameId, boardState.findWinner());
+        GameProgressState gameProgressState = board.getBoardState();
+        gameRepository.update(gameId, gameProgressState.getSateName());
+        if (gameProgressState.getSateName().equals(StateName.GAME_OVER)) {
+            gameRepository.update(gameId, gameProgressState.findWinner());
         }
     }
 }

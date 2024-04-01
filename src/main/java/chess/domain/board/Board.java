@@ -2,7 +2,7 @@ package chess.domain.board;
 
 import chess.domain.board.dto.BoardOutput;
 import chess.domain.board.dto.GameResult;
-import chess.domain.board.state.BoardState;
+import chess.domain.board.state.GameProgressState;
 import chess.domain.board.state.WhiteTurnState;
 import chess.domain.piece.CampType;
 import chess.domain.piece.Piece;
@@ -21,16 +21,16 @@ public class Board {
     private static final String CANNOT_MOVE_EXCEPTION = "해당 경로로는 말을 이동할 수 없습니다.";
 
     private final Map<Square, Piece> board;
-    private BoardState boardState;
+    private GameProgressState gameProgressState;
 
     public Board(Map<Square, Piece> board) {
         this.board = board;
-        this.boardState = new WhiteTurnState();
+        this.gameProgressState = new WhiteTurnState();
     }
 
-    public Board(Map<Square, Piece> board, BoardState boardState) {
+    public Board(Map<Square, Piece> board, GameProgressState gameProgressState) {
         this.board = board;
-        this.boardState = boardState;
+        this.gameProgressState = gameProgressState;
     }
 
     public Piece move(Square source, Square destination) {
@@ -41,12 +41,12 @@ public class Board {
 
         if (destinationPiece.isNotEmpty()) {
             updateBoard(source, destination, sourcePiece, new Piece(PieceType.EMPTY, CampType.EMPTY));
-            boardState = checkGameOver(destinationPiece);
+            gameProgressState = checkGameOver(destinationPiece);
             return new Piece(PieceType.EMPTY, CampType.EMPTY);
         }
 
         updateBoard(source, destination, sourcePiece, destinationPiece);
-        boardState = boardState.nextTurnState();
+        gameProgressState = gameProgressState.nextTurnState();
         return destinationPiece;
     }
 
@@ -59,7 +59,7 @@ public class Board {
     }
 
     private void checkTurn(Piece sourcePiece, Piece destinationPiece) {
-        if (!boardState.checkMovable(sourcePiece, destinationPiece)) {
+        if (!gameProgressState.checkMovable(sourcePiece, destinationPiece)) {
             throw new IllegalArgumentException(NOT_YOUR_TURN_EXCEPTION);
         }
     }
@@ -70,12 +70,12 @@ public class Board {
         }
     }
 
-    private BoardState checkGameOver(Piece destinationPiece) {
+    private GameProgressState checkGameOver(Piece destinationPiece) {
         if (destinationPiece.isKing()) {
-            return boardState.makeGameOver();
+            return gameProgressState.makeGameOver();
         }
 
-        return boardState.nextTurnState();
+        return gameProgressState.nextTurnState();
     }
 
     private void updateBoard(Square source, Square destination, Piece sourcePiece, Piece destinationPiece) {
@@ -87,7 +87,7 @@ public class Board {
         double whiteScore = calculateScoreByCamp(Piece::isWhite);
         double blackScore = calculateScoreByCamp(Piece::isBlack);
 
-        return new GameResult(boardState.findWinner(), whiteScore, blackScore);
+        return new GameResult(gameProgressState.findWinner(), whiteScore, blackScore);
     }
 
     private double calculateScoreByCamp(Predicate<Piece> filterByCamp) {
@@ -139,7 +139,7 @@ public class Board {
         return board.get(square);
     }
     
-    public BoardState getBoardState() {
-        return boardState;
+    public GameProgressState getBoardState() {
+        return gameProgressState;
     }
 }
