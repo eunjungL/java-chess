@@ -1,22 +1,22 @@
-package chess.domain.piece.strategy;
+package chess.domain.piece.strategy.legalmove;
 
 import chess.domain.board.Board;
 import chess.domain.square.Square;
 import chess.domain.square.dto.SquareDifferent;
 
-public class KnightLegalMoveCheckStrategy implements LegalMoveCheckStrategy {
+public class KingLegalMoveCheckStrategy implements LegalMoveCheckStrategy {
 
     @Override
     public boolean check(Square source, Square destination, Board board) {
         SquareDifferent diff = source.calculateDiff(destination);
 
-        int rankDiff = Math.abs(diff.rankDiff());
         int fileDiff = Math.abs(diff.fileDiff());
+        int rankDiff = Math.abs(diff.rankDiff());
 
-        if (rankDiff == 2 && fileDiff == 1) {
+        if (fileDiff + rankDiff == 1) {
             return true;
         }
 
-        return rankDiff == 1 && fileDiff == 2;
+        return fileDiff == 1 && rankDiff == 1;
     }
 }

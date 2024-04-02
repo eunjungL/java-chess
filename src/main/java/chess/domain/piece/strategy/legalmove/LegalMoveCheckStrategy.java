@@ -1,4 +1,4 @@
-package chess.domain.piece.strategy;
+package chess.domain.piece.strategy.legalmove;
 
 import chess.domain.board.Board;
 import chess.domain.square.Square;

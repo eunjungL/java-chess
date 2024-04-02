@@ -12,6 +12,7 @@ import chess.domain.square.Rank;
 import chess.domain.square.Square;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
 
@@ -91,44 +92,24 @@ public class Board {
     }
 
     private double calculateScoreByCamp(Predicate<Piece> filterByCamp) {
-        double totalScore = 0;
+        double score = 0;
 
         for (File file : File.values()) {
-            double pawnScore = calculatePawnScore(filterByCamp, file);
-            double notPawnScore = calculateNotPawnScore(filterByCamp, file);
-
-            totalScore += (pawnScore + notPawnScore);
+            score += calculateScoreByFile(filterByCamp, file, score);
         }
 
-        return totalScore;
+        return score;
     }
 
-    private double calculatePawnScore(Predicate<Piece> filterByCamp, File file) {
-        long countDuplicatedPawn = countDuplicatedPawnInFile(filterByCamp, file);
-
-        return Arrays.stream(Rank.values())
+    private double calculateScoreByFile(Predicate<Piece> filterByCamp, File file, double score) {
+        List<Piece> piecesByFile = Arrays.stream(Rank.values())
                 .map(rank -> board.get(Square.of(file, rank)))
                 .filter(filterByCamp)
-                .filter(Piece::isPawn)
-                .mapToDouble(piece -> piece.calculateScore(countDuplicatedPawn))
-                .sum();
-    }
+                .toList();
 
-    private long countDuplicatedPawnInFile(Predicate<Piece> filterByColor, File file) {
-        return Arrays.stream(Rank.values())
-                .map(rank -> board.get(Square.of(file, rank)))
-                .filter(filterByColor)
-                .filter(Piece::isPawn)
-                .count();
-    }
-
-    private double calculateNotPawnScore(Predicate<Piece> filterByCamp, File file) {
-        return Arrays.stream(Rank.values())
-                .map(rank -> board.get(Square.of(file, rank)))
-                .filter(filterByCamp)
-                .filter(piece -> !piece.isPawn())
-                .mapToDouble(Piece::calculateScore)
-                .sum();
+        return piecesByFile.stream()
+                .mapToDouble(piece -> piece.calculateScore(piecesByFile))
+                .reduce(0, Double::sum);
     }
 
     public BoardOutput toBoardOutput() {

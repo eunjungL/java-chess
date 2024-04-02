@@ -2,6 +2,8 @@ package chess.domain.piece.strategy;
 
 import chess.domain.board.Board;
 import chess.domain.board.BoardFactory;
+import chess.domain.piece.strategy.legalmove.KnightLegalMoveCheckStrategy;
+import chess.domain.piece.strategy.legalmove.LegalMoveCheckStrategy;
 import chess.domain.square.File;
 import chess.domain.square.Rank;
 import chess.domain.square.Square;

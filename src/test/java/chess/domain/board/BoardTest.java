@@ -195,6 +195,7 @@ public class BoardTest {
         GameResult actual = board.createGameResult();
 
         // then
+        System.out.println(board);
         assertThat(actual).isEqualTo(expected);
     }
 }

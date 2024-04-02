@@ -3,6 +3,8 @@ package chess.domain.piece;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
 
@@ -21,9 +23,15 @@ public class PieceTest {
     void calculateScore() {
         // given
         Piece queen = new Piece(PieceType.QUEEN, CampType.WHITE);
+        List<Piece> piecesByFile = List.of(
+                new Piece(PieceType.QUEEN, CampType.WHITE),
+                new Piece(PieceType.PAWN, CampType.WHITE),
+                new Piece(PieceType.PAWN, CampType.BLACK),
+                new Piece(PieceType.QUEEN, CampType.BLACK)
+        );
 
         // when
-        double actual = queen.calculateScore();
+        double actual = queen.calculateScore(piecesByFile);
 
         // then
         assertThat(actual).isEqualTo(9);
