@@ -1,10 +1,10 @@
 package chess;
 
+import chess.controller.GameCreateController;
+import chess.controller.GamePlayingController;
 import chess.domain.board.dao.BoardDao;
 import chess.domain.board.dao.BoardRepository;
 import chess.domain.board.service.BoardService;
-import chess.controller.GameCreateController;
-import chess.controller.GamePlayingController;
 import chess.domain.game.dao.GameDao;
 import chess.domain.game.dao.GameRepository;
 import chess.domain.game.service.GameService;

@@ -13,7 +13,6 @@ public class GameDao implements GameRepository {
     private static final String SAVE_EXCEPTION = "Game 테이블에 정보를 저장하던 중 오류가 발생했습니다.";
     private static final String GAME_NOT_FOUND = "존재하지 않는 게임입니다.";
     private static final String UPDATE_EXCEPTION = "Game 테이블을 업데이트하던 중 오류가 발생했습니다.";
-    private static final String STATE_NOT_FOUND = "존재하지 않는 상태입니다.";
     private static final String READ_EXCEPTION = "Game 테이블에서 정보를 읽어오던 중 발생했습니다.";
 
     private final Connection connection;
@@ -52,7 +51,7 @@ public class GameDao implements GameRepository {
 
             if (resultSet.next()) {
                 String stateName = resultSet.getString("state");
-                return makeBoardState(stateName, resultSet);
+                return findGameProgressState(resultSet, stateName);
             }
 
             throw new IllegalArgumentException(GAME_NOT_FOUND);
@@ -61,21 +60,12 @@ public class GameDao implements GameRepository {
         }
     }
 
-    private GameProgressState makeBoardState(String stateName, ResultSet resultSet) throws SQLException {
-        if (stateName.equals(StateName.BLACK_TURN.name())) {
-            return new BlackTurnState();
+    private GameProgressState findGameProgressState(ResultSet resultSet, String stateName) throws SQLException {
+        if (resultSet.getString("winner_camp") == null) {
+            return StateName.findByStateName(stateName);
         }
 
-        if (stateName.equals(StateName.WHITE_TURN.name())) {
-            return new WhiteTurnState();
-        }
-
-        if (stateName.equals(StateName.GAME_OVER.name())) {
-            String winnerCampName = resultSet.getString("winner_camp");
-            return new GameOverState(CampType.findByName(winnerCampName));
-        }
-
-        throw new IllegalArgumentException(STATE_NOT_FOUND);
+        return StateName.findByStateName(stateName, resultSet.getString("winner_camp"));
     }
 
     @Override
