@@ -71,7 +71,7 @@ public class Board {
     }
 
     private GameProgressState checkGameOver(Piece destinationPiece) {
-        if (destinationPiece.isKing()) {
+        if (destinationPiece.isGameOver()) {
             return gameProgressState.makeGameOver();
         }
 

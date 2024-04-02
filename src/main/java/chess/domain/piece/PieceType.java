@@ -8,13 +8,13 @@ import java.util.Arrays;
 
 public enum PieceType {
 
-    KING(new KingLegalMoveCheckStrategy(), 0),
-    QUEEN(new QueenLegalMoveCheckStrategy(), 9),
-    ROOK(new RookLegalMoveCheckStrategy(), 5),
-    BISHOP(new BishopLegalMoveCheckStrategy(), 3),
-    KNIGHT(new KnightLegalMoveCheckStrategy(), 2.5),
-    PAWN(new PawnLegalMoveCheckStrategy(), 1),
-    EMPTY(new EmptyLegalMoveCheckStrategy(), 0),
+    KING(new KingLegalMoveCheckStrategy(), 0, true),
+    QUEEN(new QueenLegalMoveCheckStrategy(), 9, false),
+    ROOK(new RookLegalMoveCheckStrategy(), 5, false),
+    BISHOP(new BishopLegalMoveCheckStrategy(), 3, false),
+    KNIGHT(new KnightLegalMoveCheckStrategy(), 2.5, false),
+    PAWN(new PawnLegalMoveCheckStrategy(), 1, false),
+    EMPTY(new EmptyLegalMoveCheckStrategy(), 0, false),
     ;
 
     private static final double PAWN_PENALTY_SCORE = 0.5;
@@ -22,14 +22,20 @@ public enum PieceType {
 
     private final LegalMoveCheckStrategy legalMoveCheckStrategy;
     private final double score;
+    private final boolean isGameOver;
 
-    PieceType(LegalMoveCheckStrategy legalMoveCheckStrategy, double score) {
+    PieceType(LegalMoveCheckStrategy legalMoveCheckStrategy, double score, boolean isGameOver) {
         this.legalMoveCheckStrategy = legalMoveCheckStrategy;
         this.score = score;
+        this.isGameOver = isGameOver;
     }
 
     public boolean canMove(Square source, Square destination, Board board) {
         return legalMoveCheckStrategy.check(source, destination, board);
+    }
+
+    public boolean isGameOver() {
+        return isGameOver;
     }
 
     public static PieceType findByName(String name) {

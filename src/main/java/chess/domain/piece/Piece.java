@@ -25,8 +25,8 @@ public class Piece {
         return !pieceType.equals(PieceType.EMPTY);
     }
 
-    public boolean isKing() {
-        return pieceType.equals(PieceType.KING);
+    public boolean isGameOver() {
+        return pieceType.isGameOver();
     }
 
     public boolean isPawn() {
