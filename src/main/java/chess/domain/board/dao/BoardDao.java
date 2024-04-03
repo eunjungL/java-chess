@@ -50,10 +50,10 @@ public class BoardDao implements BoardRepository {
             PreparedStatement statement = connection
                     .prepareStatement("INSERT INTO board (game_id, square, piece_id) VALUES (?, ?, ?)");
 
-            for (Map.Entry<Square, Piece> b : board.entrySet()) {
-                String squareKey = b.getKey().getKey();
-                int pieceId = pieceDao.findIdByPiece(b.getValue())
-                        .orElseGet(() -> pieceDao.save(b.getValue()));
+            for (Map.Entry<Square, Piece> boardEntry : board.entrySet()) {
+                String squareKey = boardEntry.getKey().getKey();
+                int pieceId = pieceDao.findIdByPiece(boardEntry.getValue())
+                        .orElseGet(() -> pieceDao.save(boardEntry.getValue()));
 
                 statement.setInt(1, gameId);
                 statement.setString(2, squareKey);
