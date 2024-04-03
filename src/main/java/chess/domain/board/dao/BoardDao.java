@@ -58,9 +58,10 @@ public class BoardDao implements BoardRepository {
                 statement.setInt(1, gameId);
                 statement.setString(2, squareKey);
                 statement.setInt(3, pieceId);
-
-                statement.executeUpdate();
+                statement.addBatch();
             }
+
+            statement.executeBatch();
         } catch (SQLException e) {
             throw new RuntimeException(SAVE_EXCEPTION);
         }
