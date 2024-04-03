@@ -37,8 +37,7 @@ public class BoardFactory {
 
     private void makeEmptyPieceByFile(Map<Square, Piece> expected, Rank rank) {
         for (File file : File.values()) {
-            Piece piece = new Piece(PieceType.EMPTY, CampType.EMPTY);
-            savePiece(expected, Square.of(file, rank), piece);
+            expected.put(Square.of(file, rank), new Piece(PieceType.EMPTY, CampType.EMPTY));
         }
     }
 
@@ -49,11 +48,8 @@ public class BoardFactory {
         while (fileIterator.hasNext() && pieceTypeIterator.hasNext()) {
             File file = fileIterator.next();
 
-            Piece normalPiece = new Piece(pieceTypeIterator.next(), CampType.BLACK);
-            savePiece(expected, Square.of(file, Rank.EIGHT), normalPiece);
-
-            Piece pawnPiece = new Piece(PieceType.PAWN, CampType.BLACK);
-            savePiece(expected, Square.of(file, Rank.SEVEN), pawnPiece);
+            expected.put(Square.of(file, Rank.EIGHT), new Piece(pieceTypeIterator.next(), CampType.BLACK));
+            expected.put(Square.of(file, Rank.SEVEN), new Piece(PieceType.PAWN, CampType.BLACK));
         }
     }
 
@@ -64,15 +60,8 @@ public class BoardFactory {
         while (fileIterator.hasNext() && pieceTypeIterator.hasNext()) {
             File file = fileIterator.next();
 
-            Piece normalPiece = new Piece(pieceTypeIterator.next(), CampType.WHITE);
-            savePiece(expected, Square.of(file, Rank.ONE), normalPiece);
-
-            Piece pawnPiece = new Piece(PieceType.PAWN, CampType.WHITE);
-            savePiece(expected, Square.of(file, Rank.TWO), pawnPiece);
+            expected.put(Square.of(file, Rank.ONE), new Piece(pieceTypeIterator.next(), CampType.WHITE));
+            expected.put(Square.of(file, Rank.TWO), new Piece(PieceType.PAWN, CampType.WHITE));
         }
-    }
-
-    private void savePiece(Map<Square, Piece> expected, Square square, Piece piece) {
-        expected.put(square, piece);
     }
 }
