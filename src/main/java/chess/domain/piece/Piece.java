@@ -27,8 +27,8 @@ public class Piece {
         return !pieceType.equals(PieceType.EMPTY);
     }
 
-    public boolean isGameOver() {
-        return pieceType.isGameOver();
+    public boolean isCheckMated() {
+        return pieceType.isCheckMated();
     }
 
     public boolean canMove(Square source, Square destination, Board board) {

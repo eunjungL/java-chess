@@ -72,7 +72,7 @@ public class Board {
     }
 
     private GameProgressState checkGameOver(Piece destinationPiece) {
-        if (destinationPiece.isGameOver()) {
+        if (destinationPiece.isCheckMated()) {
             return gameProgressState.makeGameOver();
         }
 

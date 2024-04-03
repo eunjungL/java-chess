@@ -24,20 +24,20 @@ public enum PieceType {
 
     private final LegalMoveCheckStrategy legalMoveCheckStrategy;
     private final CalculateScoreStrategy scoreStrategy;
-    private final boolean isGameOver;
+    private final boolean isCheckMated;
 
-    PieceType(LegalMoveCheckStrategy legalMoveCheckStrategy, CalculateScoreStrategy scoreStrategy, boolean isGameOver) {
+    PieceType(LegalMoveCheckStrategy legalMoveCheckStrategy, CalculateScoreStrategy scoreStrategy, boolean isCheckMated) {
         this.legalMoveCheckStrategy = legalMoveCheckStrategy;
         this.scoreStrategy = scoreStrategy;
-        this.isGameOver = isGameOver;
+        this.isCheckMated = isCheckMated;
     }
 
     public boolean canMove(Square source, Square destination, Board board) {
         return legalMoveCheckStrategy.check(source, destination, board);
     }
 
-    public boolean isGameOver() {
-        return isGameOver;
+    public boolean isCheckMated() {
+        return isCheckMated;
     }
 
     public static PieceType findByName(String name) {
